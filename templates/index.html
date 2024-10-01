@@ -1,0 +1,22 @@
+﻿<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Programa gerador de mensagens</title>
+</head>
+<body>
+    <form method="post">
+        <div>
+            <label for="nome">Nome</label>
+            <input type="text" name="nome" id="nome" required>
+            <button type="submit">Gerar</button>
+        </div>
+    </form>
+
+    <!-- Exibe a mensagem -->
+    {% if texto %}
+        <h2>{{ texto }}</h2>
+    {% endif %}
+</body>
+</html>
