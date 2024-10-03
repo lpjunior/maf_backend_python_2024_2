@@ -1,0 +1,30 @@
+﻿todo/
+|_ app.py
+|_ templates/
+    |_ index.html
+|_ static/
+    |_ styles.css
+
+Objetivo: Criar um web app oferecendo os recursos:
+- Adicionar nova tarefa - ok
+- Exibir a lista de tarefas - ok
+- Marcar tarefas como concluídas - ok
+- Remover tarefas da lista
+
+Permitir que trabalhem os seguintes conceitos:
+- Rotas 
+- Renderização
+- Interação de dados
+- Organização dos dados
+- Persistência de dados *
+
+* No primeiro momento os dados serão armazenados em memória
+
+app.py
+    foi definido 4 rotas
+    / - exibe a lista de tarefas
+    /adicionar - recebe via formulário uma nova tarefa e adiciona na lista
+    /completar/<tarefa_id> - marca a tarefa como concluída
+    /remover/<tarefa_id> - remove a tarefa da lista
+    
+  Está utilizando uma lista em memória. Cada tarefa é representada por um dicionário que armazena o conteúdo da tarefa.

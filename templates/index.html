@@ -1,0 +1,38 @@
+﻿<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Title</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <h1>Lista de Tarefas</h1>
+    
+    <!-- Formulário para adicionar uma nova tarefa -->
+    <form action="{{ url_for('adicionar') }}" method="post">
+        <input type="text" name="tarefa" placeholder="Nova tarefa." required>
+        <button type="submit">Adicionar</button>
+    </form>
+
+    <!-- Exibe a lista de tarefas -->
+    <ul>
+        {% for tarefa in tarefas %}
+        <li>
+            {% if tarefa.completa %}
+                <del>{{ loop.index }} - {{ tarefa.conteudo }}</del>
+            {% else %}
+                {{ loop.index }} - {{ tarefa.conteudo }}
+            {% endif %}
+            
+            <!-- Botão para marcar a tarefa como completa -->
+            {% if tarefa.completa %}
+                <a class="remover" href="{{ url_for('remover', tarefa_id=loop.index0) }}">[Remover]</a>
+            {% else %}
+                <a href="{{ url_for('completar', tarefa_id=loop.index0) }}">[Completar]</a>
+            {% endif %}
+        </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
