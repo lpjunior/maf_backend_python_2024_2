@@ -1,5 +1,11 @@
 ﻿todo/
-|_ app.py
+|_ app.py                         # Arquivo principal da aplicação
+|_ controllers/
+    |_ tarefa_controller.py       # Lógica das rotas e interação com as regras de negócio
+|_ services/
+    |_ tarefa_service.py          # Regras de negócio (validações, limites, etc.)
+|_ models/
+    |_ tarefa_model.py            # Estrutura dos dados de tarefa
 |_ templates/
     |_ index.html
 |_ static/
@@ -9,13 +15,13 @@ Objetivo: Criar um web app oferecendo os recursos:
 - Adicionar nova tarefa - ok
 - Exibir a lista de tarefas - ok
 - Marcar tarefas como concluídas - ok
-- Remover tarefas da lista
+- Remover tarefas da lista - ok
 
 Permitir que trabalhem os seguintes conceitos:
 - Rotas 
 - Renderização
 - Interação de dados
-- Organização dos dados
+- Organização dos dados *
 - Persistência de dados *
 
 * No primeiro momento os dados serão armazenados em memória

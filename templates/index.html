@@ -10,7 +10,7 @@
     <h1>Lista de Tarefas</h1>
     
     <!-- Formulário para adicionar uma nova tarefa -->
-    <form action="{{ url_for('adicionar') }}" method="post">
+    <form action="{{ url_for('task.adicionar') }}" method="post">
         <input type="text" name="tarefa" placeholder="Nova tarefa." required>
         <button type="submit">Adicionar</button>
     </form>
@@ -27,9 +27,9 @@
             
             <!-- Botão para marcar a tarefa como completa -->
             {% if tarefa.completa %}
-                <a class="remover" href="{{ url_for('remover', tarefa_id=loop.index0) }}">[Remover]</a>
+                <a class="remover" href="{{ url_for('task.remover', tarefa_id=loop.index0) }}">[Remover]</a>
             {% else %}
-                <a href="{{ url_for('completar', tarefa_id=loop.index0) }}">[Completar]</a>
+                <a href="{{ url_for('task.completar', tarefa_id=loop.index0) }}">[Completar]</a>
             {% endif %}
         </li>
         {% endfor %}
