@@ -13,9 +13,10 @@ def index():
 @task_blueprint.route("/adicionar", methods=["POST"])
 def adicionar():
     conteudo = request.form.get("tarefa")
+    prioridade = request.form.get("prioridade", "Média")
 
     try:
-        task_service.adicionar_tarefa(conteudo)
+        task_service.adicionar_tarefa(conteudo, prioridade)
     except ValueError as e:
         return str(e), 400
 
@@ -23,12 +24,22 @@ def adicionar():
 
 @task_blueprint.route("/completar/<int:tarefa_id>")
 def completar(tarefa_id):
-    # Marca a tarefa como completa
-    task_service.completar_tarefa(tarefa_id)
+    
+    try:
+        # Marca a tarefa como completa
+        task_service.completar_tarefa(tarefa_id)
+    except Exception as e:
+        return str(e), 400
+    
     return redirect(url_for("task.index"))
 
 @task_blueprint.route("/remover/<int:tarefa_id>")
 def remover(tarefa_id):
     # Remove a tarefa da lista
-    task_service.remover_tarefa(tarefa_id)
+    try:
+        # Marca a tarefa como completa
+        task_service.remover_tarefa(tarefa_id)
+    except Exception as e:
+        return str(e), 400
+    
     return redirect(url_for("task.index"))

@@ -12,6 +12,7 @@
     <!-- Formulário para adicionar uma nova tarefa -->
     <form action="{{ url_for('task.adicionar') }}" method="post">
         <input type="text" name="tarefa" placeholder="Nova tarefa." required>
+        <input type="text" name="prioridade" placeholder="Prioridade.">
         <button type="submit">Adicionar</button>
     </form>
 
