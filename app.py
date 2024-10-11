@@ -9,6 +9,7 @@ app.register_blueprint(task_blueprint)
 base_dir = os.path.abspath(os.path.dirname(__file__))
 app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{os.path.join(base_dir , "task.db")}'
 app.config['SQLALCHEMY_TRACK_NOTIFICATIONS'] = False
+app.config['SQLALCHEMY_ECHO'] = True
 
 db.init_app(app)
 
