@@ -1,5 +1,5 @@
 ﻿from models.task_model import Task
-from app import db
+from configurations.database import db
 
 class TaskService:
     def adicionar_tarefa(self, conteudo, prioridade="Média"):
