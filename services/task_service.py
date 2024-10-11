@@ -1,7 +1,4 @@
-﻿from flask import render_template
-
-from controllers.task_controller import adicionar
-from models.task_model import Task
+﻿from models.task_model import Task
 from app import db
 
 class TaskService:
