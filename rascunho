@@ -1,5 +1,9 @@
 ﻿todo/
 |_ app.py                         # Arquivo principal da aplicação
+|_configurations/                 # Instância do SQLAlchemy
+    |_ database.py
+|_ repositories/
+    |_task_repository.py          # Repositório de queries SQL
 |_ controllers/
     |_ tarefa_controller.py       # Lógica das rotas e interação com as regras de negócio
 |_ services/
