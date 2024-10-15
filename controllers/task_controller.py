@@ -14,6 +14,9 @@ def index():
 def adicionar():
     conteudo = request.form.get("tarefa")
     prioridade = request.form.get("prioridade", "Média")
+    
+    if prioridade == '':
+        prioridade = 'Média'
 
     try:
         task_service.adicionar_tarefa(conteudo, prioridade)

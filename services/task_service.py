@@ -2,7 +2,7 @@
 
 class TaskService:
     def adicionar_tarefa(self, conteudo, prioridade="Média"):
-        if not conteudo:
+        if not conteudo or not conteudo:
             raise ValueError("A tarefa não pode ser vazia")
 
         TaskRepository.add_task(conteudo, prioridade)

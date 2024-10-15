@@ -28,7 +28,7 @@
             
             <!-- Botão para marcar a tarefa como completa -->
             {% if tarefa.completa %}
-                <a class="remover" href="{{ url_for('task.remover', tarefa_id=tarefa.id) }}">[Remover]</a>
+                <a class="remover" href="{{ url_for('task.remover', tarefa_id=6) }}">[Remover]</a>
             {% else %}
                 <a href="{{ url_for('task.completar', tarefa_id=tarefa.id) }}">[Completar]</a>
             {% endif %}

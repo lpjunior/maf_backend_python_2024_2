@@ -22,11 +22,15 @@ Objetivo: Criar um web app oferecendo os recursos:
 - Remover tarefas da lista - ok
 
 Permitir que trabalhem os seguintes conceitos:
-- Rotas 
+- Rotas
 - Renderização
 - Interação de dados
-- Organização dos dados *
-- Persistência de dados *
+- Organização dos dados
+- Persistência de dados
+- Permitir cadastro de usuários
+- Gerenciar as tarefas por usuário
+- Tela de login
+- Interação via e-mail
 
 * No primeiro momento os dados serão armazenados em memória
 

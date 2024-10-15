@@ -25,8 +25,9 @@ class TaskRepository:
         
     @staticmethod
     def complete_task(tarefa_id):
+        print(f'>>>>>>>> {tarefa_id}')
         query = text("UPDATE tasks SET completa = TRUE WHERE id = :id")
-        db.session.execute(query, {'id', tarefa_id})
+        db.session.execute(query, {'id': tarefa_id})
         db.session.commit()
         
     @staticmethod
