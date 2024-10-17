@@ -3,22 +3,23 @@ from sqlalchemy import text
 
 class TaskRepository:
     @staticmethod
-    def get_all_tasks():
-        query = text("SELECT * FROM tasks")
-        result = db.session.execute(query)
+    def get_all_tasks(user_id):
+        query = text("SELECT * FROM tasks WHERE user_id = :user_id")
+        result = db.session.execute(query, {'user_id': user_id})
         return result.fetchall()
     
     @staticmethod
-    def add_task(conteudo, prioridade="Média"):
+    def add_task(conteudo, user_id, prioridade="Média"):
         query = text("""
-            INSERT INTO tasks (conteudo, completa, prioridade)
-            VALUES (:conteudo, :completa, :prioridade)
+            INSERT INTO tasks (conteudo, completa, prioridade, user_id)
+            VALUES (:conteudo, :completa, :prioridade, :user_id)
         """)
         
         db.session.execute(query, {
             'conteudo': conteudo,
             'completa': False,
-            'prioridade': prioridade
+            'prioridade': prioridade,
+            'user_id': user_id
         })
         
         db.session.commit()

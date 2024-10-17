@@ -11,9 +11,18 @@
     {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
             {% for category, message in messages %}
-                <p>{{ category }}</p>
+                <p>{{ message }}</p>
             {% endfor %}
         {% endif %}
     {% endwith %}
+
+    <form method="post" action="{{ url_for('user.adicionar_usuario') }}">
+        <label for="username">Nome do usuário:</label>
+        <input type="text" id="username" name="username" required>
+        <label for="password">Senha:</label>
+        <input type="password" id="password" name="password" required>
+        
+        <button type="submit">Criar</button>
+    </form>
 </body>
 </html>

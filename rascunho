@@ -2,24 +2,39 @@
 |_ app.py                         # Arquivo principal da aplicação
 |_configurations/                 # Instância do SQLAlchemy
     |_ database.py
+    |_ sql_commands.py
 |_ repositories/
-    |_task_repository.py          # Repositório de queries SQL
+    |_ task_repository.py         # Repositório de queries SQL
+    |_ user_repository.py         # Repositório de queries SQL
 |_ controllers/
     |_ tarefa_controller.py       # Lógica das rotas e interação com as regras de negócio
+    |_ user_controller.py         # Lógica das rotas e interação com as regras de negócio
 |_ services/
-    |_ tarefa_service.py          # Regras de negócio (validações, limites, etc.)
+    |_ task_service.py            # Regras de negócio (validações, limites, etc.)
+    |_ user_service.py            # Regras de negócio (validações, limites, etc.)
 |_ models/
-    |_ tarefa_model.py            # Estrutura dos dados de tarefa
+    |_ task_model.py              # Estrutura dos dados de tarefa
+    |_ user_model.py              # Estrutura dos dados de tarefa
 |_ templates/
-    |_ index.html
+    |_ task_list.html
+    |_ add_user.html
+    |_ login.html
 |_ static/
     |_ styles.css
+|_ requirements.txt               # Dependências necessária do projeto
+|_ .env                           # Variáveis de ambiente
 
 Objetivo: Criar um web app oferecendo os recursos:
 - Adicionar nova tarefa - ok
 - Exibir a lista de tarefas - ok
 - Marcar tarefas como concluídas - ok
 - Remover tarefas da lista - ok
+- Cadastrar usuário - ok
+- Efetuar login - ok
+- Efetuar logout - ok
+- Relacionar tarefa a usuário - ok
+- Listagem de usuários para o usuário root
+- Desativação de um usuário pelo usuário root
 
 Permitir que trabalhem os seguintes conceitos:
 - Rotas
@@ -30,7 +45,6 @@ Permitir que trabalhem os seguintes conceitos:
 - Permitir cadastro de usuários
 - Gerenciar as tarefas por usuário
 - Tela de login
-- Interação via e-mail
 
 * No primeiro momento os dados serão armazenados em memória
 

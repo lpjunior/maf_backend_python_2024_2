@@ -9,7 +9,22 @@ def create_table_tasks(app, db):
         conteudo VARCHAR(200) NOT NULL,
         completa BOOLEAN DEFAULT FALSE,
         prioridade VARCHAR(50) NOT NULL DEFAULT 'Média'
-    );''' 
+    );
+    
+    ALTER TABLE tasks ADD COLUMN IF NOT EXISTS user_id INTEGER NOT NULL REFERENCES users(id);
+       
+    DO $$
+    BEGIN
+        IF NOT EXISTS (
+            SELECT 1 FROM information_schema.table_constraints
+             WHERE constraint_type = 'FOREIGN KEY'
+             AND table_name = 'tasks'
+             AND constraint_name = 'fk_user_id'     
+        ) THEN
+            ALTER TABLE tasks ADD CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE;
+        END IF;
+    END $$;
+    ''' 
     
     with app.app_context():
         db.session.execute(text(create_table_sql))
@@ -25,7 +40,9 @@ def create_table_users(app, db):
         username VARCHAR(80) NOT NULL,
         password_hash VARCHAR(255) NOT NULL,
         is_admin BOOLEAN DEFAULT FALSE
-    );'''
+    );
+    ALTER TABLE users ADD COLUMN IF NOT EXISTS active BOOLEAN DEFAULT TRUE;
+    '''
 
     with app.app_context():
         db.session.execute(text(create_table_sql))
