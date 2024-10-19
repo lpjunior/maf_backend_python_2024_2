@@ -1,5 +1,9 @@
 ﻿from configurations.database import db
-from sqlalchemy import text 
+from sqlalchemy import text
+
+from models.task_model import Task
+from models.user_model import User
+
 
 class TaskRepository:
     @staticmethod
@@ -36,3 +40,8 @@ class TaskRepository:
         query = text("DELETE FROM tasks WHERE id = :id")
         db.session.execute(query, {'id': tarefa_id})
         db.session.commit()
+        
+        
+    @staticmethod
+    def get_tasks_with_users():
+        return db.session.query(Task, User).join(User, Task.user_id == User.id).all()

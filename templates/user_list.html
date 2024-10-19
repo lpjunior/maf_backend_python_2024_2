@@ -8,7 +8,7 @@
 </head>
 <body>
     <h1>Lista de Usuários</h1>
-    <a href="{{ url_for('user.logout') }}" class="button">Logout</a>
+    <a href="{{ url_for('user.logout') }}" class="button btn-danger">Logout</a>
 
     {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
@@ -26,6 +26,7 @@
                 <th>ID</th>
                 <th>Username</th>
                 <th>Status</th>
+                <th>Ação</th>
             </tr>
         </thead>
         <tbody>
@@ -34,6 +35,17 @@
                     <td>{{ user.id }}</td>
                     <td>{{ user.username }}</td>
                     <td>{{ 'Ativo' if user.active else 'Desativado' }}</td>
+                    <td>
+                        {% if user.active %}
+                            <form method="post" action="{{ url_for('user.activate_user', user_id=user.id, activate=0) }}">
+                                <input type="submit" value="Desativar" />
+                            </form>
+                        {% else %}
+                            <form method="post" action="{{ url_for('user.activate_user', user_id=user.id, activate=1) }}">
+                                <input type="submit" value="Ativar" />
+                            </form>
+                        {% endif %}
+                    </td>
                 </tr>
             {% endfor %}
         </tbody>

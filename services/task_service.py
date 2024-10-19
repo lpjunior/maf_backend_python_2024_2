@@ -15,3 +15,7 @@ class TaskService:
 
     def remover_tarefa(self, tarefa_id):
         TaskRepository.delete_task(tarefa_id)
+
+    @staticmethod
+    def listar_tarefas_com_usuarios():
+        return TaskRepository.get_tasks_with_users()

@@ -1,0 +1,44 @@
+﻿<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Lista de Tarefas dos Usuários</title>
+    <link href="{{ url_for('static', filename='styles.css') }}" rel="stylesheet">
+</head>
+<body>
+    <h1>Lista de Tarefas dos Usuários</h1>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <ul class="flashes">
+            {% for category, message in messages %}
+            <li class="{{ category }}">{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    {% endwith %}
+    
+    <a href="{{ url_for('user.admin_dashboard') }}" class="button btg-dark">Voltar ao menu principal
+    </a>
+    <table>
+        <thead>
+            <tr>
+                <th>Tarefa</th>
+                <th>Prioridade</th>
+                <th>Completa</th>
+                <th>Usuário</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for task, user in tasks %}
+                <tr>
+                    <td>{{ task.conteudo }}</td>
+                    <td>{{ task.prioridade }}</td>
+                    <td>{{ 'sim' if task.completa else 'Não' }}</td>
+                    <td>{{ user.username }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

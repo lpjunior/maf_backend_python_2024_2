@@ -9,6 +9,7 @@ class Task(db.Model):
     prioridade = db.Column(db.String(50), nullable=False, default="Média")
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
 
+    #user = db.relationship('User', back_populates='tasks')
     def __repr__(self):                 # Representação textual da tarefa
         return f"Tarefa('{self.conteudo}', '{self.completa}', '{self.prioridade}')"   
         

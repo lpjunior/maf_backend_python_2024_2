@@ -16,11 +16,11 @@ class UserRepository:
     
     @staticmethod
     def list_users():
-        return User.query.all()
+        return User.query.filter(User.username != 'root').all()
     
     @staticmethod
-    def deactivate_user(user_id):
+    def activate_user(user_id, active):
         user = UserRepository.find_by_id(user_id)
         if user:
-            user.active = False
+            user.active = active
             db.session.commit()

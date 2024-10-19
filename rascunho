@@ -33,8 +33,10 @@ Objetivo: Criar um web app oferecendo os recursos:
 - Efetuar login - ok
 - Efetuar logout - ok
 - Relacionar tarefa a usuário - ok
-- Listagem de usuários para o usuário root
-- Desativação de um usuário pelo usuário root
+- Listagem de usuários para o usuário root - ok
+- Desativação de um usuário pelo usuário root - ok
+- Ajuste na tela de admin - ok
+- Ajuste na rota principal
 
 Permitir que trabalhem os seguintes conceitos:
 - Rotas

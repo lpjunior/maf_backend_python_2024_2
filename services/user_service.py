@@ -18,3 +18,7 @@ class UserService:
     @staticmethod
     def list_users():
         return UserRepository.list_users()
+    
+    @staticmethod
+    def ativar_user(user_id, active):
+        UserRepository.activate_user(user_id, active)

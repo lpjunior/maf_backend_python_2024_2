@@ -1,0 +1,26 @@
+﻿<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Painel de Administração</title>
+    <link href="{{ url_for('static', filename='styles.css') }}" rel="stylesheet">
+</head>
+<body>
+    <h1>Painel de Administração</h1>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <ul class="flashes">
+        {% for category, message in messages %}
+        <li class="{{ category }}">{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    {% endwith %}
+
+    <div class="admin-options">
+        <a href="{{ url_for('user.list_users') }}" class="button btg-dark">Ver Lista de Usuários</a>
+        <a href="{{ url_for('task.listar_tarefas_com_usuarios') }}" class="button btg-dark">Ver Lista de Tarefas</a>
+    </div>
+</body>
+</html>

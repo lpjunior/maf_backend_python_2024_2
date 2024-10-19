@@ -1,4 +1,4 @@
-﻿from flask import Blueprint, render_template, request, url_for, redirect, session
+﻿from flask import Blueprint, render_template, request, url_for, redirect, session, flash
 from services.task_service import TaskService
 
 task_blueprint = Blueprint('task', __name__, url_prefix="/task")
@@ -54,3 +54,14 @@ def remover(tarefa_id):
         return str(e), 400
     
     return redirect(url_for("task.listar"))
+
+@task_blueprint.route('/list_tasks_with_users')
+def listar_tarefas_com_usuarios():
+    if 'user_id' not in session or not session.get('is_admin'):
+        flash('Acesso negado. Apenas administradores logados podem acessar essa página', 'danger')
+        return redirect(url_for('user.login'))
+    
+    #tasks = Task.query.join(User).all() # Junta a tabela de tarefas com a de usuários
+    tasks_with_users = TaskService.listar_tarefas_com_usuarios()
+    print(tasks_with_users)
+    return render_template('list_tasks_with_users.html', tasks=tasks_with_users)

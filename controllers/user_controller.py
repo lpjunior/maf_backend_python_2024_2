@@ -55,3 +55,21 @@ def list_users():
     print(users)
     return render_template('user_list.html', users=users)
 
+@user_blueprint.route('/activate_user/<int:user_id>/<int:activate>', methods=['POST'])
+def activate_user(user_id, activate):
+    if 'user_id' not in session or not session.get('is_admin'):
+        flash('Acesso negado. Apenas administradores logados podem gerenciar usuários.', 'danger')
+        return redirect(url_for('user.login'))
+
+    UserService.ativar_user(user_id=user_id, active=bool(activate))
+    
+    return redirect(url_for('user.list_users'))
+
+@user_blueprint.route('/admin')
+def admin_dashboard():
+    if 'user_id' not in session or not session.get('is_admin'):
+        flash('Acesso negado. Apenas administradores logados podem acessar essa página', 'danger')
+        return redirect(url_for('user.login'))
+    
+    return render_template('admin_dashboard.html')
+
