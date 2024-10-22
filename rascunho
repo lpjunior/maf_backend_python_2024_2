@@ -1,0 +1,28 @@
+﻿1. Projeto
+django-admin startproject nome_do_projeto
+
+nome_do_projeto/
+    manage.py # CLI - Command Line Interface -> Interface de linha de comando
+    nome_do_projeto/
+        __init__.py
+        settings.py
+        urls.py
+        asgi.py
+        wsgi.py
+        
+python manage.py runserver 
+python manage.py makemigrations
+python manage.py migrate
+python manage.py createsuperuser
+
+2. Aplicativo
+
+    nome_do_app/
+        migrations/
+            __init__.py
+        __init__.py
+        admin.py
+        apps.py
+        models.py
+        tests.py
+        views.py
