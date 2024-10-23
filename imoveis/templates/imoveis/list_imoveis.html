@@ -1,5 +1,35 @@
 ﻿<h1>Lista de imóveis</h1>
+<table>
+    <thead>
+        <tr>
+            <th>Endereço</th>
+            <th>Cidade</th>
+            <th>Estado</th>
+            <th>Preço do Aluguel</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for imovel in imoveis %}
+        <tr>
+            <td>{{ imovel.endereco }}</td>
+            <td>{{ imovel.cidade }}</td>
+            <td>{{ imovel.estado }}</td>
+            <td>{{ imovel.preco_aluguel }}</td>
+            <td>
+                <!-- Botão de Editar -->
+                <a href="{% url 'editar_imovel' imovel.id %}">Editar</a>
+                <!-- Botão de Excluir -->
+                <a href="{% url 'excluir_imovel' imovel.id %}">Excluir</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="5">Nenhum imóvel cadastrado.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
 <ul>
-    
-    
 </ul>
+<a href="{% url 'index' %}">Voltar</a>

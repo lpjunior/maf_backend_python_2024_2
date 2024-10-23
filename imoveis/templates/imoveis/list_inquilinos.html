@@ -1,5 +1,7 @@
 ﻿<h1>Lista de Inquilinos</h1>
 <ul>
-
-
+    {% for inquilino in inquilinos %}
+    <li>{{ inquilino.nome }} - {{ inquilino.imovel.endereco }}</li>
+    {% endfor %}
 </ul>
+<a href="{% url 'index' %}">Voltar</a>
