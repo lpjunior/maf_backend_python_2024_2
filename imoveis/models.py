@@ -10,7 +10,7 @@ class Imovel(models.Model):
 
     def __str__(self):
         return f"{self.endereco} - {self.cidade}/{self.estado}"
-    
+
 # Modelo para Inquilinos
 class Inquilino(models.Model):
     nome = models.CharField(max_length=100)
@@ -20,7 +20,7 @@ class Inquilino(models.Model):
     
     def __str__(self):
         return f"{self.nome} - {self.imovel.endereco}"
-    
+
 # Modelo para Aluguéis
 class Aluguel(models.Model):
     inquilino = models.ForeignKey(Inquilino, on_delete=models.CASCADE)

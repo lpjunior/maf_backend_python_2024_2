@@ -1,7 +1,13 @@
-﻿<h1>Editar Imóvel</h1>
-<form method="post">
+﻿{% extends 'imoveis/base.html' %}
+
+{% block title %}Editar Imóvel{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Editar Imóvel</h1>
+<form method="post" class="row g-3">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit">Salvar alterações</button>
+    <button type="submit" class="btn btn-primary">Salvar alterações</button>
 </form>
-<a href="{% url 'list_imoveis' %}">Cancelar</a>
+<a href="{% url 'list_imoveis' %}" class="btn btg-large btn-secondary">Cancelar</a>
+{% endblock %}
