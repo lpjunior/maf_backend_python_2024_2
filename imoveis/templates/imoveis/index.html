@@ -1,3 +1,15 @@
-﻿<h1>Bem-Vindo ao Sistema de Gestão de Aluguéis</h1>
-<a href="{% url 'list_imoveis' %}">Ver Imóveis</a>
-<a href="{% url 'list_inquilinos' %}">Ver Inquilinos</a>
+﻿{% extends 'imoveis/base.html' %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<div class="jumbotron text-center">
+    <h1>Bem-Vindo à Gestão de Aluguéis</h1>
+    <p class="lead">Gerencie seus imóveis, inquilinos e pagamentos de maneira eficiente.</p>
+</div>
+
+<div class="container mt-4">
+    <a href="{% url 'list_imoveis' %}">Ver Imóveis</a>
+    <a href="{% url 'list_inquilinos' %}">Ver Inquilinos</a>
+</div>
+{% endblock %}

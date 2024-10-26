@@ -1,0 +1,47 @@
+{% extends 'imoveis/base.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">{{ title }}</h1>
+<form method="post" class="row g-3">
+    {% csrf_token %}
+    
+    <div class="col-md-6">
+        {{ form.endereco.label_tag }}
+        {{ form.endereco }}
+    </div>
+    <div class="col-md-6">
+        {{ form.cidade.label_tag }}
+        {{ form.cidade }}
+    </div>
+    <div class="col-md-6">
+        {{ form.estado.label_tag }}
+        {{ form.estado }}
+    </div>
+    <div class="col-md-6">
+        {{ form.preco_aluguel.label_tag }}
+        {{ form.preco_aluguel }}
+    </div>
+    <div class="col-12">
+        {{ form.descricao.label_tag }}
+        {{ form.descricao }}
+    </div>
+    
+    {% if form.errors %}
+        <div class="alert alert-danger">
+            <ul>
+                {% for field in form %}
+                    {% for error in field.errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+    <div class="col-12">
+        <button type="submit" class="btn btn-primary">Salvar</button>
+        <a href="{% url 'list_imoveis' %}" class="btn btg-large btn-secondary">Cancelar</a>
+    </div>
+</form>
+{% endblock %}

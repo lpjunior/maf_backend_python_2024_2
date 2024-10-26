@@ -1,7 +1,39 @@
-﻿<h1>Lista de Inquilinos</h1>
-<ul>
+﻿{% extends 'imoveis/base.html' %}
+
+{% block title %}Lista de Inquilinos{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Lista de Inquilinos</h1>
+<table class="table table-striped">
+    <thead class="thead-dark">
+    <tr>
+        <th scope="col">Nome</th>
+        <th scope="col">Telefone</th>
+        <th scope="col">E-mail</th>
+        <th scope="col">Ações</th>
+    </tr>
+    </thead>
+    <tbody>
     {% for inquilino in inquilinos %}
-    <li>{{ inquilino.nome }} - {{ inquilino.imovel.endereco }}</li>
+    <tr>
+        <td>{{ inquilino.nome }}</td>
+        <td>{{ inquilino.telefone }}</td>
+        <td>{{ inquilino.email }}</td>
+        <td>
+            <!-- Botão de Editar -->
+            <a class="btn btn-warning btn-sm" href="{% url 'editar_inquilino' inquilino.id %}">Editar</a>
+            <!-- Botão de Excluir -->
+            <a class="btn btn-danger btn-sm" href="">Excluir</a>
+        </td>
+    </tr>
+    {% empty %}
+    <tr>
+        <td colspan="4">Nenhum inquilino cadastrado.</td>
+    </tr>
     {% endfor %}
+    </tbody>
+</table>
+<ul>
 </ul>
-<a href="{% url 'index' %}">Voltar</a>
+<a class="btn btn-secondary" href="{% url 'index' %}">Voltar</a>
+{% endblock %}

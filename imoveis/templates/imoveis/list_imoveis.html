@@ -4,6 +4,14 @@
 
 {% block content %}
 <h1 class="mb-4">Lista de imóveis</h1>
+
+<form method="GET" action="{% url 'list_imoveis' %}" class="row g-3 mb-4">
+    <input type="text" placeholder="Buscar imóvel" name="q" value="{{ query }}" class="form-control">
+    <button type="submit" class="btn btn-dark btn-sm">Buscar</button>
+</form>
+
+<a class="btn btn-success" href="{% url 'adicionar_imovel' %}">Adicionar Imóvel</a>
+
 <table class="table table-striped">
     <thead class="thead-dark">
         <tr>

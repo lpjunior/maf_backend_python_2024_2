@@ -1,28 +1,39 @@
-﻿1. Projeto
-django-admin startproject nome_do_projeto
-
-nome_do_projeto/
-    manage.py # CLI - Command Line Interface -> Interface de linha de comando
-    nome_do_projeto/
-        __init__.py
-        settings.py
-        urls.py
-        asgi.py
-        wsgi.py
-        
-python manage.py runserver 
-python manage.py makemigrations
-python manage.py migrate
-python manage.py createsuperuser
-
-2. Aplicativo
-
-    nome_do_app/
-        migrations/
-            __init__.py
-        __init__.py
-        admin.py
-        apps.py
-        models.py
-        tests.py
-        views.py
+﻿gestao_alugueis/
+|
+|- gestao_alugueis/             # Diretório do projeto principal
+    |- __init__.py              # Definir diretório como modulo
+    |- settings.py              # Configuração do Django para o projeto
+    |- urls.py                  # Mapeamento de URLs para todo o projeto
+    |- wsgi.py                  # Ponto de entrada WSGI para servidores compatíveis
+|
+|- imoveis/                     # Aplicativo 'imoveis' dentro do projeto
+    |- migrations
+        |- __init__.py          # Definir diretório como modulo
+        |- 0001_initial.py      # Arquivo de migrate da estrutura incial do projeto
+    |- templates/               # Templates específicos da aplicação 'imoveis'
+        |- imoveis/
+            |- base.html                     # Template base para todas as págians
+            |- index.html                    # Página inicial
+            |- login.html                    # Página de login
+            |- list_imoveis.html             # Lista de imoveis
+            |- form_imoveis.html             # Adicionar/Editar Imovel
+            |- form_inquilino.html           # Adicionar/Editar Inquilino
+            |- excluir_imoveis.html          # Excluir Imovel
+            |- list_inquilinos.html          # Lista de inquilinos
+            |- relatorio_pagamentos.html     # Relatório dos pagamentos ocorridos e pendentes
+    |
+    |- static/
+        |- imoveis/
+            |- css/
+                |- style.css            # Arquivo CSS customizado
+    |
+    |- admin.py                 # Configurações da administração do Django
+    |- apps.py                  # Configurações da aplicação
+    |- forms.py                 # Formulários da aplicação
+    |- models.py                # Modelos de dados
+    |- tests.py                 # Testes unitários
+    |- urls.py                  # Mapeamento de URLs para a aplicação 'imoveis'
+    |- views.py                 # Views da aplicação 'imoveis'
+|
+|- db.sqlite3                   # Banco de dados SQLite
+|- manage.py                    # Script de gestão do Django

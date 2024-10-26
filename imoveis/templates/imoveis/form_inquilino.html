@@ -1,0 +1,43 @@
+{% extends 'imoveis/base.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">{{ title }}</h1>
+<form method="post" class="row g-3">
+    {% csrf_token %}
+    
+    <div class="col-md-6">
+        {{ form.nome.label_tag }}
+        {{ form.nome }}
+    </div>
+    <div class="col-md-6">
+        {{ form.telefone.label_tag }}
+        {{ form.telefone }}
+    </div>
+    <div class="col-md-6">
+        {{ form.email.label_tag }}
+        {{ form.email }}
+    </div>
+    <div class="col-md-6">
+        {{ form.imovel.label_tag }}
+        {{ form.imovel }}
+    </div>
+    
+    {% if form.errors %}
+        <div class="alert alert-danger">
+            <ul>
+                {% for field in form %}
+                    {% for error in field.errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+    <div class="col-12">
+        <button type="submit" class="btn btn-primary">Salvar</button>
+        <a href="{% url 'list_inquilinos' %}" class="btn btg-large btn-secondary">Cancelar</a>
+    </div>
+</form>
+{% endblock %}
