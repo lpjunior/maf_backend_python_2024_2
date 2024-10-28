@@ -1,15 +1,49 @@
 ﻿{% extends 'imoveis/base.html' %}
 
-{% block title %}Login{% endblock %}
+{% block title %}Página Inicial{% endblock %}
 
 {% block content %}
 <div class="jumbotron text-center">
-    <h1>Bem-Vindo à Gestão de Aluguéis</h1>
+    <h1 class="display-4">Bem-vindo à Gestão de Imóveis!</h1>
     <p class="lead">Gerencie seus imóveis, inquilinos e pagamentos de maneira eficiente.</p>
 </div>
 
 <div class="container mt-4">
-    <a href="{% url 'list_imoveis' %}">Ver Imóveis</a>
-    <a href="{% url 'list_inquilinos' %}">Ver Inquilinos</a>
+    <div class="row">
+        {% if request.user.is_authenticated %}
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Imóveis</h5>
+                    <p class="card-text">Visualize, adicione e edite seus imóveis cadastrados no sistema.</p>
+                    <a href="{% url 'list_imoveis' %}" class="btn btn-primary">Ver Imóveis</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Inquilinos</h5>
+                    <p class="card-text">Gerencie os inquilinos e acompanhe suas informações e contratos.</p>
+                    <a href="{% url 'list_inquilinos' %}" class="btn btn-primary">Ver Inquilinos</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Relatórios</h5>
+                    <p class="card-text">Acesse relatórios detalhados sobre pagamentos e status dos imóveis.</p>
+                    <a href="{% url 'relatorio_pagamentos' %}" class="btn btn-primary">Ver Relatórios</a>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="col-12 text-center">
+            <h5 class="mt-4">Para acessar o sistema, faça login:</h5>
+            <a href="{% url 'login' %}" class="btn btn-primary mt-2">Login</a>
+        </div>
+        {% endif %}
+    </div>
 </div>
 {% endblock %}
