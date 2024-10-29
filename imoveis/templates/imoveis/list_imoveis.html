@@ -5,9 +5,23 @@
 {% block content %}
 <h1 class="mb-4">Lista de imóveis</h1>
 
-<form method="GET" action="{% url 'list_imoveis' %}" class="row g-3 mb-4">
-    <input type="text" placeholder="Buscar imóvel" name="q" value="{{ query }}" class="form-control">
-    <button type="submit" class="btn btn-dark btn-sm">Buscar</button>
+<form method="GET" class="mb-4">
+    <div class="row">
+        <div class="col-md-3">
+            <input type="text" placeholder="Cidade" name="cidade" value="{{ request.GET.cidade }}" class="form-control">
+        </div>
+        <div class="col-md-3">
+            <input type="text" placeholder="Estado" name="estado" value="{{ request.GET.estado }}" class="form-control">
+        </div>
+        <div class="col-md-3">
+            <input type="number" placeholder="Preço Mínimo" name="preco_min" value="{{ request.GET.preco_min }}" class="form-control">
+        </div>
+        <div class="col-md-3">
+            <input type="number" placeholder="Preço Máximo" name="preco_max" value="{{ request.GET.preco_max }}" class="form-control">
+        </div>
+    </div>
+    <button type="submit" class="btn btn-dark mt-3">Buscar</button>
+    <a href="{% url 'list_imoveis' %}" class="btn btn-secondary mt-3">Limpar Filtros</a>
 </form>
 
 <a class="btn btn-success" href="{% url 'adicionar_imovel' %}">Adicionar Imóvel</a>

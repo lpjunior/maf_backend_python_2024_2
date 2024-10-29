@@ -37,3 +37,84 @@
 |
 |- db.sqlite3                   # Banco de dados SQLite
 |- manage.py                    # Script de gestão do Django
+
+
+Estrutura do Projeto
+O projeto está organizado com as seguintes funcionalidades principais:
+
+1. Imóveis:
+    - Adição com validação do preço do aluguel, edição e exclusão de imóveis.
+    - Listagem de imóveis, com filtro por cidade, estado e faixa de preço.
+    - Associação ao modelo de inquilino por uma relação ForeinKey.
+    
+2 . Inquilinos:
+    - Adição com validação de email, edição, listagem e exclusão de inquilinos.
+    - Associação a um imóvel específico.
+    
+3. Relatório de Pagamentos:
+    - Relatório de pagamentos efetuados e pendentes.
+    - Cálculo do total recebido considerando apenas aluguéis pagos.
+    - A listagem de aluguéis pendentes.
+    - Modal com gráfico de pagamentos
+    - Export do relatório de alugueis
+    
+4. Autenticação e Autorização:
+    - Sistema de login e logout
+    - Páginas protegidas(@login_required) para evitar o acesso não autorizado.
+    - Usuários logados têm acesso à listagem de inquilinos e relatórios.
+    - Somente usuários autenticados podem ver e interagir com os botões de edição e exclusão.
+    
+Estrura do projeto (arquivos)
+
+1. Models
+    - Imovel
+    - Inquilino
+    - Aluguel
+
+2. Views
+    - list_imoveis
+    - adicionar_inquilino
+    - editar_inquilino
+    - list_inquilinos
+    - adicionar_imovel
+    - editar_imovel
+    - excluir_imovel
+    - user_login
+    - user_logout
+    - relatorio_pagamentos
+    
+3. Forms
+    - ImovelForm
+    - InquilinoForm
+ 
+4. Templates
+    -base.html
+    -excluir_imovel.html
+    -form_imovel.html
+    -form_inquilino.html
+    -index.html
+    -list_imoveis.html
+    -list_inquilinos.html
+    -login.html
+    -relatorio_pagamentos.html
+
+5. Configurações
+    - Configurações de banco de dados, autenticação e segurança.
+    - Integração com Boostrap e configurações de middleware para suporte a autenticação.
+    
+Bibliotecas Usadas
+    - Django
+    - Django ORM
+    - Boostrap
+
+Próximos passos:
+1. Criar CRUD de aluguéis - Create Retrieve Update Delete 
+2. Notificação de Vencimento
+    - Próximo da data
+    - Aluguel vencido
+    - Notificação de pagamento recebido
+3. Painel Administrativo
+    - Criar uma dashboard métricas de pagamento
+4. Teste e Documentação:
+    - Escrever testes unitários
+    - Documentar o projeto e suas funcionalidades

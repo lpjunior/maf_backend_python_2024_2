@@ -1,0 +1,7 @@
+<h1>Excluir Imóvel</h1>
+<p>Tem certeza que deseja excluir o aluguel de <strong>: {{ aluguel.inquilino.nome }}?</strong></p>
+<form method="post">
+    {% csrf_token %}
+    <button type="submit">Excluir</button>
+</form>
+<a href="{% url 'listar_alugueis' %}">Cancelar</a>

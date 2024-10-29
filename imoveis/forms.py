@@ -1,5 +1,5 @@
 ﻿from django import forms
-from imoveis.models import Imovel, Inquilino
+from imoveis.models import Imovel, Inquilino, Aluguel
 
 
 class ImovelForm(forms.ModelForm):
@@ -36,3 +36,14 @@ class InquilinoForm(forms.ModelForm):
         if not email:
             raise forms.ValidationError("O campo email é obrigatório.")
         return email
+
+class AluguelForm(forms.ModelForm):
+    class Meta:
+        model = Aluguel
+        fields = ['inquilino', 'data_vencimento', 'valor', 'pago']
+        widgets = {
+            'inquilino': forms.Select(attrs={'class': 'form-control', 'placeholder': 'Escolha o inquilino'}),
+            'data_vencimento': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+            'valor': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Digite o preço do aluguel'}),
+            'pago': forms.Select(attrs={'class': 'form-control', 'placeholder': 'Escolha o imóvel'}),
+        }

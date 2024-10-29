@@ -1,0 +1,45 @@
+{% extends 'imoveis/base.html' %}
+{% load custom_filters %}
+
+{% block title %}Lista de Aluguéis{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Lista de Aluguéis</h1>
+
+<a class="btn btn-success" href="{% url 'cadastrar_aluguel' %}">Adicionar Aluguel</a>
+
+<table class="table table-striped">
+    <thead class="thead-dark">
+    <tr>
+        <th scope="col">Inquilino</th>
+        <th scope="col">Data de Vencimento</th>
+        <th scope="col">Valor</th>
+        <th scope="col">Pago</th>
+        <th scope="col">Ações</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for aluguel in alugueis %}
+    <tr>
+        <td>{{ aluguel.inquilino.nome }}</td>
+        <td>{{ aluguel.data_vencimento }}</td>
+        <td>{{ aluguel.valor|floatformat:2 }}</td>
+        <td>{{ aluguel.pago|pago_sim_nao }}</td>
+        <td>
+            <!-- Botão de Editar -->
+            <a class="btn btn-warning btn-sm" href="{% url 'editar_aluguel' aluguel.id %}">Editar</a>
+            <!-- Botão de Excluir -->
+            <a class="btn btn-danger btn-sm" href="{% url 'excluir_aluguel' aluguel.id %}">Excluir</a>
+        </td>
+    </tr>
+    {% empty %}
+    <tr>
+        <td colspan="4">Nenhum aluguel cadastrado.</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+<ul>
+</ul>
+<a class="btn btn-secondary" href="{% url 'index' %}">Voltar</a>
+{% endblock %}
