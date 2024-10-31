@@ -32,7 +32,7 @@
             <a class="btn btn-danger btn-sm" href="{% url 'excluir_aluguel' aluguel.id %}">Excluir</a>
             <!-- Botão de Pagar -->
             {% if not aluguel.pago %}
-            <a class="btn btn-success btn-sm" href="{% url 'marcar_como_aluguel' aluguel.id %}">Pago</a>
+            <a class="btn btn-success btn-sm" href="{% url 'marcar_como_pago' aluguel.id %}">Pago</a>
             {% endif %}
         </td>
     </tr>

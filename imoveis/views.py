@@ -222,7 +222,7 @@ def excluir_aluguel(request, aluguel_id):
     return render(request, 'alugueis/excluir_aluguel.html', {'aluguel': aluguel})
 
 @login_required
-def marcar_como_aluguel(request, aluguel_id):
+def marcar_como_pago(request, aluguel_id):
     aluguel = get_object_or_404(Aluguel, id = aluguel_id)
 
     if not aluguel.pago:
