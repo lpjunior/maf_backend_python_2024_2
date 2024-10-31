@@ -29,5 +29,6 @@ urlpatterns = [
     path('alugueis/', views.listar_alugueis, name='listar_alugueis'),
     path('alugueis/adicionar/', views.cadastrar_aluguel, name='cadastrar_aluguel'),
     path('alugueis/editar/<int:aluguel_id>', views.editar_aluguel, name='editar_aluguel'),
+    path('alugueis/marcar_como_aluguel/<int:aluguel_id>', views.marcar_como_aluguel, name='marcar_como_aluguel'),
     path('alugueis/excluir/<int:aluguel_id>', views.excluir_aluguel, name='excluir_aluguel'),
 ]

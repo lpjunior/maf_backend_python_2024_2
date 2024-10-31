@@ -1,9 +1,20 @@
 {% extends 'imoveis/base.html' %}
+{% load custom_filters %}
 
 {% block title %}Relatório de Pagamentos{% endblock %}
 {% block content %}
     <div class="container mt-4">
         <h1>Relatório de Pagamentos</h1>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert {% if message.tags %}alert-{{ message.tags|alertformat }}{% endif %} alert-dismissible fade show" role="alert">
+                <strong>Atenção!</strong> {{ message }}.
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+        
         
         <div class="alert alert-success">
             <h4>Total Recebido: <strong>R$ {{ total_recebido|floatformat:2 }}</strong></h4>

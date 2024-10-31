@@ -8,12 +8,16 @@
     {% csrf_token %}
 
     <div class="col-md-6">
-        {{ form.inquilino.nome.label_tag }}
-        {{ form.inquilino.nome }}
+        {{ form.inquilino.label_tag }}
+        {{ form.inquilino }}
     </div>
     <div class="col-md-6">
         {{ form.valor.label_tag }}
         {{ form.valor }}
+    </div>
+    <div class="col-md-6">
+        {{ form.data_vencimento.label_tag }}
+        {{ form.data_vencimento }}
     </div>
     <div class="col-md-6">
         {{ form.pago.label_tag }}
@@ -33,7 +37,7 @@
     {% endif %}
     <div class="col-12">
         <button type="submit" class="btn btn-primary">Salvar</button>
-        <a href="{% url 'list_inquilinos' %}" class="btn btg-large btn-secondary">Cancelar</a>
+        <a href="{% url 'listar_alugueis' %}" class="btn btg-large btn-secondary">Cancelar</a>
     </div>
 </form>
 {% endblock %}

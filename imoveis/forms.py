@@ -45,5 +45,5 @@ class AluguelForm(forms.ModelForm):
             'inquilino': forms.Select(attrs={'class': 'form-control', 'placeholder': 'Escolha o inquilino'}),
             'data_vencimento': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
             'valor': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Digite o preço do aluguel'}),
-            'pago': forms.Select(attrs={'class': 'form-control', 'placeholder': 'Escolha o imóvel'}),
+            'pago': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
         }
