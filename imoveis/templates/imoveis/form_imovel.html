@@ -1,4 +1,4 @@
-{% extends 'imoveis/base.html' %}
+{% extends 'base.html' %}
 
 {% block title %}{{ title }}{% endblock %}
 
@@ -6,20 +6,29 @@
 <h1 class="mb-4">{{ title }}</h1>
 <form method="post" class="row g-3">
     {% csrf_token %}
+
+    <div class="col-md-4">
+        {{ form.cep.label_tag }}
+        {{ form.cep }}
+    </div>
     
-    <div class="col-md-6">
+    <div class="col-md-8">
         {{ form.endereco.label_tag }}
         {{ form.endereco }}
     </div>
-    <div class="col-md-6">
+    <div class="col-md-4">
+        {{ form.bairro.label_tag }}
+        {{ form.bairro }}
+    </div>
+    <div class="col-md-4">
         {{ form.cidade.label_tag }}
         {{ form.cidade }}
     </div>
-    <div class="col-md-6">
+    <div class="col-md-2">
         {{ form.estado.label_tag }}
         {{ form.estado }}
     </div>
-    <div class="col-md-6">
+    <div class="col-md-2">
         {{ form.preco_aluguel.label_tag }}
         {{ form.preco_aluguel }}
     </div>
@@ -44,4 +53,30 @@
         <a href="{% url 'list_imoveis' %}" class="btn btg-large btn-secondary">Cancelar</a>
     </div>
 </form>
+{% endblock %}
+
+{% block extra_js %}
+    <script>
+        document.getElementById('id_cep').addEventListener('blur', function() {
+            const cep = this.value;
+            if(cep) {
+                fetch(`/buscar-endereco/?cep=${cep}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if(data.erro) {
+                            alert(data.erro);
+                        } else {
+                            document.getElementById('id_endereco').value = data.endereco;
+                            document.getElementById('id_bairro').value = data.bairro;
+                            document.getElementById('id_cidade').value = data.cidade;
+                            document.getElementById('id_estado').value = data.estado;
+                            document.getElementById('id_cep').value = data.cep;
+                        }
+                    })
+                    .catch(error => {
+                        alert('Erro ao buscar o endereço: ' + error);
+                    });
+            }
+        });
+    </script>
 {% endblock %}

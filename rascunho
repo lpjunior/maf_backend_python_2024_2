@@ -47,6 +47,8 @@ O projeto está organizado com as seguintes funcionalidades principais:
     - Adição com validação do preço do aluguel, edição e exclusão de imóveis.
     - Listagem de imóveis, com filtro por cidade, estado e faixa de preço.
     - Associação ao modelo de inquilino por uma relação ForeinKey.
+    - Integração com viacep para consulta nos correios.
+    - Integração com Maps
     
 2 . Inquilinos:
     - Adição com validação de email, edição, listagem e exclusão de inquilinos.
@@ -118,22 +120,29 @@ Próximos passos:
     - Próximo da data
     - Aluguel vencido
     - Notificação de pagamento recebido
-2. Integração com viacep para consulta nos correios
-3. Google Maps
-4. Upload de fotos do imovel
-5. Vitrine de fotos do imovel
-6. Ajustar o relacionamento Inquilino x Imovel x Aluguel
-7. Mudar para o PostgreSQL usando o Supabase    
-8. Painel Administrativo
+2. Colocar retry no carregamento do mapa
+3. Upload de fotos do imovel
+4. Vitrine de fotos do imovel
+5. Ajustar o relacionamento Inquilino x Imovel x Aluguel
+6. Mudar para o PostgreSQL usando o Supabase    
+7. Painel Administrativo
     - Criar uma dashboard métricas de pagamento
-9. Teste e Documentação:
+8. Teste e Documentação:
     - Escrever testes unitários
     - Documentar o projeto e suas funcionalidades
-10. Publicar o projeto na nuvem
+9. Publicar o projeto na nuvem
     
 Próximos passos (opcional):
 - o valor do imovel + 10% + encargos
 - logomarca da imobiliaria
+- autenticação com rede social
+
+
+Atualizar a consulta de CEP para o https://www.gov.br/ 
+- solicitar o token
+- guardar o token em memoria
+- validar o expired time do token
+- consulta
 
 
 git init                      # criar o repositorio

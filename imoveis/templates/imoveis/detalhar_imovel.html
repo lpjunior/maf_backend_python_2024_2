@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block title %}Detalhes do Imóvel{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+{% endblock %}
+
+{% block content %}
+<h1>Detalhes do Imóvel</h1>
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h2 class="mb-0">{{ imovel.nome }}</h2>
+        </div>
+        <div class="card-body">
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <p><strong>Endereço:</strong> {{ imovel.endereco }}</p>
+                </div>
+                <div class="col-md-6">
+                    <p><strong>Bairro:</strong> {{ imovel.bairro }}</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="col-md-6">
+                    <p><strong>Cidade:</strong> {{ imovel.cidade }}</p>
+                </div>
+                <div class="col-md-6">
+                    <p><strong>Estado:</strong> {{ imovel.estado }}</p>
+                </div>
+            </div>
+            <div class="mb-4">
+                <h5>Localização no Mapa:</h5>
+                <div id="display_name"></div>
+                <div id="map" style="height: 400px; width: 100%" class="rounded border"></div>
+            </div>
+            <a href="{% url 'list_imoveis' %}" class="btn btn-secondary">Voltar para a Lista de Imóveis</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block extra_js %}
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+    var map = L.map('map').setView([{{ latitude }}, {{ longitude }}], 13);
+    
+    document.getElementById('display_name').innerHTML = "{{ display_name }}";
+    
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '© Alugueis Senac'
+    }).addTo(map);
+    
+    L.marker([{{ latitude }}, {{ longitude }}]).addTo(map)
+    .bindPopup("Localização")
+    .openPopup();
+</script>
+{% endblock %}

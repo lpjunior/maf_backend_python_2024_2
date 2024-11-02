@@ -14,6 +14,10 @@ urlpatterns = [
     path('imoveis/adicionar/', views.adicionar_imovel, name='adicionar_imovel'),
     path('imoveis/editar/<int:imovel_id>', views.editar_imovel, name='editar_imovel'),
     path('imoveis/excluir/<int:imovel_id>', views.excluir_imovel, name='excluir_imovel'),
+    path('imoveis/detalhar_imovel/<int:imovel_id>', views.detalhar_imovel, name='detalhar_imovel'),
+    
+    # Rota de consulta de CEP
+    path('buscar-endereco/', views.buscar_endereco, name='buscar_endereco'),
     
     ## Rota de Relatórios
     path('relatorios/relatorio_pagamentos/', views.relatorio_pagamentos, name='relatorio_pagamentos'),
