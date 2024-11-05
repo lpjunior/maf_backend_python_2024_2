@@ -1,7 +1,7 @@
 import csv
 import datetime
 
-from django.conf import settings
+from django.template.loader import render_to_string
 from django.utils import timezone
 
 from django.contrib.auth import authenticate, login, logout
@@ -11,7 +11,9 @@ from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 from django.db.models import Sum
+from django.utils.html import strip_tags
 
+from gestao_alugueis.utils import enviar_email
 from imoveis.forms import ImovelForm, InquilinoForm, AluguelForm
 from imoveis.models import Imovel, Inquilino, Aluguel
 from imoveis.services.geocode import get_coordinates_from_address
@@ -53,6 +55,15 @@ def list_inquilinos(request):
     inquilinos = Inquilino.objects.all()
     return render(request, 'inquilinos/list_inquilinos.html', {'inquilinos': inquilinos})
 
+# Excluir Inquilino
+@login_required
+def excluir_inquilino(request, inquilino_id):
+    inquilino = get_object_or_404(Inquilino, id=inquilino_id)
+    if request.method == 'POST':
+        inquilino.delete()
+        return redirect('list_inquilinos')
+    return render(request, 'inquilinos/excluir_inquilino.html', {'inquilino': inquilino})
+
 # Buscar CEP
 @login_required
 def buscar_endereco(request):
@@ -62,8 +73,6 @@ def buscar_endereco(request):
     
     try:
         dados = buscar_endereco_por_cep(cep)
-        
-        print(f"endereco ========>>>>>>>>> {dados}")
         return JsonResponse({
             'endereco': dados['logradouro'],
             'bairro': dados['bairro'],
@@ -74,7 +83,6 @@ def buscar_endereco(request):
     except Exception as e:
         return JsonResponse({'erro': f'Erro: {str(e)}'}, status=500)
 
-@login_required
 def detalhar_imovel(request, imovel_id):
     imovel = get_object_or_404(Imovel, id=imovel_id)
 
@@ -282,3 +290,35 @@ def marcar_como_pago(request, aluguel_id):
         messages.success(request, "Pagamento registrado com sucesso.")
 
     return redirect('listar_alugueis')
+
+def contato_imovel(request):
+    try:
+        if request.method == 'POST':
+            nome = request.POST.get('nome')
+            email = request.POST.get('email')
+            telefone = request.POST.get('telefone')
+            mensagem = request.POST.get('mensagem')
+            identificador = request.POST.get('identificador')
+            assunto = f'Interesse sobre no Imóvel - {identificador}'
+            ano_atual = datetime.datetime.now().year
+            
+            mensagem_html = render_to_string('email/contato_imovel.html', {
+                'nome': nome,
+                'email': email,
+                'telefone': telefone,
+                'mensagem': mensagem,
+                'identificador': identificador,
+                'ano_atual': ano_atual
+            })
+            
+            plain_message = strip_tags(mensagem_html)
+            
+            enviar_email(
+                destinatario=email,
+                assunto=assunto, 
+                mensagem=plain_message, 
+                mensagem_html=mensagem_html
+            )
+            return redirect('detalhar_imovel', imovel_id=request.POST.get('imovel_id'))
+    except Exception as e:
+        print(f"Ocorreu um erro ao tentar enviar o email. Erro: {e}")

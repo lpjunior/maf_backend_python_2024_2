@@ -28,6 +28,7 @@ urlpatterns = [
     path('inquilinos/', views.list_inquilinos, name='list_inquilinos'),
     path('inquilinos/adicionar/', views.adicionar_inquilino, name='adicionar_inquilino'),
     path('inquilinos/editar/<int:inquilino_id>', views.editar_inquilino, name='editar_inquilino'),
+    path('inquilinos/excluir/<int:inquilino_id>', views.excluir_inquilino, name='excluir_inquilino'),
 
     # Rota de Alugueis
     path('alugueis/', views.listar_alugueis, name='listar_alugueis'),
@@ -35,4 +36,7 @@ urlpatterns = [
     path('alugueis/editar/<int:aluguel_id>', views.editar_aluguel, name='editar_aluguel'),
     path('alugueis/marcar_como_pago/<int:aluguel_id>', views.marcar_como_pago, name='marcar_como_pago'),
     path('alugueis/excluir/<int:aluguel_id>', views.excluir_aluguel, name='excluir_aluguel'),
+    
+    # Rota de E-mails
+    path('notificacao/contato_imovel', views.contato_imovel, name='contato_imovel'),
 ]

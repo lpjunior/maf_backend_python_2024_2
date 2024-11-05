@@ -26,7 +26,7 @@
             <!-- Botão de Editar -->
             <a class="btn btn-warning btn-sm" href="{% url 'editar_inquilino' inquilino.id %}">Editar</a>
             <!-- Botão de Excluir -->
-            <a class="btn btn-danger btn-sm" href="">Excluir</a>
+            <a class="btn btn-danger btn-sm" href="{% url 'excluir_inquilino' inquilino.id %}">Excluir</a>
         </td>
     </tr>
     {% empty %}

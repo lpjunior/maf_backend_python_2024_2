@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Contato Sobre Imóvel</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        .email-container {
+            background-color: #ffffff;
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            background-color: #007bff;
+            color: #ffffff;
+            padding: 10px;
+            border-radius: 8px 8px 0 0;
+            text-align: center;
+        }
+        .content {
+            padding: 20px;
+        }
+        .content p {
+            margin: 0 0 10px;
+            line-height: 1.6;
+        }
+        .footer {
+            text-align: center;
+            padding: 10px;
+            font-size: 12px;
+            color: #666;
+        }
+        .btn {
+            display: inline-block;
+            background-color: #007bff;
+            color: #ffffff;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+<div class="email-container">
+    <div class="header">
+        <h1>Contato Sobre Imóvel</h1>
+    </div>
+    <div class="content">
+        <p>Olá, o {{ nome }} está interessado no imóvel {{ identificador }}</p>
+        <p><strong>Telefone:</strong> {{ telefone }}</p>
+        <p><strong>E-mail:</strong> {{ email }}</p>
+        <br>
+        <p><strong>Mensagem do contato:</strong> {{ mensagem }}</p>
+    </div>
+    <div class="footer">
+        <p>Este é um e-mail automático. Por favor, não responda.</p>
+        <p>&copy; {{ ano_atual }} Gestão de Aluguéis Senac. Todos os direitos reservados.</p>
+    </div>
+</div>
+</body>
+</html>

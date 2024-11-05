@@ -5,8 +5,9 @@ from imoveis.models import Imovel, Inquilino, Aluguel
 class ImovelForm(forms.ModelForm):
     class Meta:
         model = Imovel
-        fields = ['cep', 'endereco', 'bairro', 'cidade', 'estado', 'preco_aluguel', 'descricao']
+        fields = ['tipo_imovel', 'cep', 'endereco', 'bairro', 'cidade', 'estado', 'preco_aluguel', 'descricao']
         widgets = {
+            'tipo_imovel': forms.Select(attrs={'class': 'form-control'}),
             'cep': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Digite o CEP'}),
             'endereco': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Digite o endereço'}),
             'bairro': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Digite o bairro'}),
