@@ -1,0 +1,7 @@
+{% extends 'email/base.html' %}
+{% block content %}
+    <p>Prezado {{ aluguel.inquilino.nome }},</p>
+    <p>Esté é um lembrete de que o pagamento do aluguel do imóvel vence em {{ aluguel.data_vencimento }}.</p>
+    <p>Atenciosamente,</p>
+    <p><strong>Gestão de Aluguéis Senac</strong></p>
+{% endblock %}

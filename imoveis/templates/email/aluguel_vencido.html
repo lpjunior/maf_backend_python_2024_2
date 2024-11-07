@@ -1,0 +1,8 @@
+{% extends 'email/base.html' %}
+{% block content %}
+    <p>Prezado {{ aluguel.inquilino.nome }},</p>
+    <p>Informamos que o pagamento do aluguel do imóvel está vencido desde {{ aluguel.data_vencimento }}.</p>
+    <p>Por favor, regularize o pagamento para evitar possíveis penalidades.</p>
+    <p>Atenciosamente,</p>
+    <p><strong>Gestão de Aluguéis Senac</strong></p>
+{% endblock %}

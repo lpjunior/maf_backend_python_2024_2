@@ -18,6 +18,7 @@ from imoveis.forms import ImovelForm, InquilinoForm, AluguelForm
 from imoveis.models import Imovel, Inquilino, Aluguel
 from imoveis.services.geocode import get_coordinates_from_address
 from imoveis.services.search_address_by_cep import buscar_endereco_por_cep
+from imoveis.tasks import verificar_vencimento_aluguel
 
 
 # Página inicial
@@ -287,6 +288,16 @@ def marcar_como_pago(request, aluguel_id):
         #aluguel.data_vencimento = nova_data_vencimento
         
         aluguel.save()
+
+        email = aluguel.inquilino.email
+        assunto = 'Confirmação de pagamento recebido'
+        mensagem_html = render_to_string('email/contato_imovel.html', {
+            'titulo_email': 'Contato Sobre Imóvel',
+            'content': f'<p>Olá, {aluguel.inquilino.nome}, confirmamos o recebimento do pagamento de R$ {aluguel.valor} referente ao aluguel do imóvel.</p>'
+        })
+
+        envia_email(email, assunto, mensagem_html)
+        
         messages.success(request, "Pagamento registrado com sucesso.")
 
     return redirect('listar_alugueis')
@@ -303,22 +314,27 @@ def contato_imovel(request):
             ano_atual = datetime.datetime.now().year
             
             mensagem_html = render_to_string('email/contato_imovel.html', {
-                'nome': nome,
-                'email': email,
-                'telefone': telefone,
-                'mensagem': mensagem,
-                'identificador': identificador,
+                'titulo_email': 'Contato Sobre Imóvel',
+                'content': 
+                    f'''<p>Olá, o {nome} está interessado no imóvel {identificador}</p>
+                        <p><strong>Telefone:</strong> {telefone}</p>
+                        <p><strong>E-mail:</strong> {email}</p>
+                        <br>
+                        <p><strong>Mensagem do contato:</strong> {mensagem}</p>''',
                 'ano_atual': ano_atual
             })
             
-            plain_message = strip_tags(mensagem_html)
+            envia_email(email, assunto, mensagem_html)
             
-            enviar_email(
-                destinatario=email,
-                assunto=assunto, 
-                mensagem=plain_message, 
-                mensagem_html=mensagem_html
-            )
             return redirect('detalhar_imovel', imovel_id=request.POST.get('imovel_id'))
     except Exception as e:
         print(f"Ocorreu um erro ao tentar enviar o email. Erro: {e}")
+        
+def envia_email(email, assunto, mensagem_html):
+    plain_message = strip_tags(mensagem_html)
+    enviar_email(
+        destinatario=email,
+        assunto=assunto,
+        mensagem=plain_message,
+        mensagem_html=mensagem_html
+    )

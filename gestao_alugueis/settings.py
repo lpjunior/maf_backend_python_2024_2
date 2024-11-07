@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 import os
 from pathlib import Path
+from celery.schedules import crontab
 from dotenv import load_dotenv
 
 # Carregar o arquivo .env
@@ -24,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-^5=748+pako#e%j5*nir+k97k+og5!$5=4vswm))r+_=2-_%*n')
+SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-^5=748+pako#e%j5*nir+k97k+og5!$5=4vswm))r+_=2-_%*n')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', 'True') == 'True'
@@ -32,6 +33,32 @@ DEBUG = os.getenv('DEBUG', 'True') == 'True'
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '').split(',')
 
 LOGIN_URL = 'login'
+
+# Redis definition
+REDIS_HOST = os.getenv('REDIS_HOST')
+REDIS_PORT = os.getenv('REDIS_PORT')
+REDIS_PASSWORD = os.getenv('REDIS_PASSWORD')
+REDIS_SSL = os.getenv('REDIS_SSL')
+
+REDIS_URL = f'rediss://:{REDIS_PASSWORD}@{REDIS_HOST}:{REDIS_PORT}/0'
+# Celery definition
+
+## Configuração do backend de resultados e do agendador Celery
+CELERY_BROKER_URL = REDIS_URL
+CELERY_RESULT_BACKEND = CELERY_BROKER_URL
+
+# Adicione esta configuração para uso de SSL com Redis
+CELERY_REDIS_BACKEND_USE_SSL = {
+    'ssl_cert_reqs': 'CERT_NONE'
+}
+
+## Configuração do Celery Beat (agendamento de tarefas)
+CELERY_BEAT_SCHEDULE = {
+    'verificar_vencimento_aluguel': {
+        'task': 'imoveis.tasks.verificar_vencimento_aluguel',
+        'schedule': crontab(hour=3, minute=26), # Executa diariamente às 9h
+    }
+}
 
 # E-mail definition
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
@@ -52,6 +79,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'imoveis',
+    'django_celery_beat',
+    'django_celery_results',
 ]
 
 MIDDLEWARE = [
