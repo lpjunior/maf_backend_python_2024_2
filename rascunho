@@ -60,7 +60,6 @@ O projeto está organizado com as seguintes funcionalidades principais:
     - A listagem de aluguéis pendentes.
     - Modal com gráfico de pagamentos
     - Export do relatório de alugueis
-    - Notificação de pagamentos pendentes nos próximos 7 dias e pagamentos vencidos
     
 4. Autenticação e Autorização:
     - Sistema de login e logout
@@ -68,9 +67,14 @@ O projeto está organizado com as seguintes funcionalidades principais:
     - Usuários logados têm acesso à listagem de inquilinos e relatórios.
     - Somente usuários autenticados podem ver e interagir com os botões de edição e exclusão.
 
-5 . Aluguel:
+5. Aluguel:
     - Adição, edição, listagem e exclusão de alugueis.
     - Marcação de aluguel pago com atualização de vencimento para 30 dias
+
+6. Notificações
+        - Notificação de pagamentos pendentes nos próximos 7 dias e pagamentos vencidos.
+        - Notificação de aluguel vencido em atraso.
+        - Notificação de pagamento reconhecido pela imobiliaria.
     
 Estrura do projeto (arquivos)
 
@@ -116,32 +120,27 @@ Bibliotecas Usadas
     - Boostrap
 
 Próximos passos:
-1. Notificação de Vencimento (e-mail)
-    - Próximo da data
-    - Aluguel vencido
-3. Upload de fotos do imovel
-4. Vitrine de fotos do imovel
-5. Ajustar o relacionamento Inquilino x Imovel x Aluguel
-6. Mudar para o PostgreSQL usando o Supabase    
-7. Painel Administrativo
+1. Vitrine de fotos do imovel
+2. Upload de fotos do imovel
+3. Ajustar o relacionamento Inquilino x Imovel x Aluguel
+4. Mudar para o PostgreSQL usando o Supabase    
+5. Painel Administrativo
     - Criar uma dashboard métricas de pagamento
-8. Teste e Documentação:
+6. Teste e Documentação:
     - Escrever testes unitários
     - Documentar o projeto e suas funcionalidades
-9. Publicar o projeto na nuvem
+7. Publicar o projeto na nuvem
     
 Próximos passos (opcional):
 - o valor do imovel + 10% + encargos
 - logomarca da imobiliaria
 - autenticação com rede social
 
-
 Atualizar a consulta de CEP para o https://www.gov.br/ 
 - solicitar o token
 - guardar o token em memoria
 - validar o expired time do token
 - consulta
-
 
 git init                      # criar o repositorio
 git clone                     # copiar/clonar um repositorio
@@ -150,7 +149,6 @@ git add <nome_do_arquivo>     # adicionar um arquivo para ser commitado
 git commit                    # commitar(persistir) a versão do(s) arquivo(s)
 git push                      # envia o commit para o repositorio remoto  
 git pull                      # trazer uma atualização do repositorio remoto
-
 
 <TIPO_IMOVEL>-<5_DIGITOS>
 CAS-12345: Casa

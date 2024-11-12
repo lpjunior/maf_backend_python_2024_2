@@ -1,8 +1,31 @@
 ﻿from django import forms
-from imoveis.models import Imovel, Inquilino, Aluguel
+from imoveis.models import Imovel, Inquilino, Aluguel, ImagemImovel
 
+class MultipleFileInput(forms.ClearableFileInput):
+    allow_multiple_selected = True
 
+class MultipleFileField(forms.FileField):
+    def __init__(self, *args, **kwargs):
+        kwargs.setdefault("widget", MultipleFileInput())
+        super().__init__(*args, **kwargs)
+
+    def clean(self, data, initial=None):
+        single_file_clean = super().clean
+        if isinstance(data, (list, tuple)):
+            result = [single_file_clean(d, initial) for d in data]
+        else:
+            result = single_file_clean(data, initial)
+        return result
+
+class ImagemImovelForm(forms.ModelForm):
+    class Meta:
+        model = ImagemImovel
+        fields = ['imagem', 'destaque']
+    
 class ImovelForm(forms.ModelForm):
+    imagens = forms.FileField(widget=forms.ClearableFileInput(attrs={'allow_multiple_selected': True}), required=False)
+    #imagem = MultipleFileField(label='Selecione as fotos', required=False)
+    
     class Meta:
         model = Imovel
         fields = ['tipo_imovel', 'cep', 'endereco', 'bairro', 'cidade', 'estado', 'preco_aluguel', 'descricao']
@@ -22,6 +45,12 @@ class ImovelForm(forms.ModelForm):
         if preco_aluguel <= 0:
             raise forms.ValidationError("O preço de aluguel deve ser um valor positivo.")
         return preco_aluguel
+    
+    def clean_imagens(self):
+        imagens = self.files.getlist('imagens')
+        if len(imagens) > 5:
+            raise forms.ValidationError('Você pode fazer upload de no máximo 5 imagens.')
+        return imagens
 
 class InquilinoForm(forms.ModelForm):
     class Meta:

@@ -1,25 +1,22 @@
 import csv
 import datetime
 
-from django.template.loader import render_to_string
-from django.utils import timezone
-
+from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.contrib import messages
+from django.db.models import Sum, Q
 from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
+from django.template.loader import render_to_string
 from django.urls import reverse
-from django.db.models import Sum
+from django.utils import timezone
 from django.utils.html import strip_tags
 
 from gestao_alugueis.utils import enviar_email
 from imoveis.forms import ImovelForm, InquilinoForm, AluguelForm
-from imoveis.models import Imovel, Inquilino, Aluguel
+from imoveis.models import Imovel, Inquilino, Aluguel, ImagemImovel
 from imoveis.services.geocode import get_coordinates_from_address
 from imoveis.services.search_address_by_cep import buscar_endereco_por_cep
-from imoveis.tasks import verificar_vencimento_aluguel
-
 
 # Página inicial
 def index(request):
@@ -29,9 +26,13 @@ def index(request):
 @login_required
 def adicionar_inquilino(request):
     if request.method == 'POST':
-        form = InquilinoForm(request.POST)
+        form = InquilinoForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
+            imovel = form.save()
+            
+            for imagem in request.FILES.getlist('imagens'):
+                ImagemImovel.objects.create(imovel=imovel, imagem=imagem)
+            
             return redirect('list_inquilinos')
     else:
         form = InquilinoForm()
@@ -42,8 +43,9 @@ def adicionar_inquilino(request):
 def editar_inquilino(request, inquilino_id):
     inquilino = get_object_or_404(Inquilino, id=inquilino_id)
     if request.method == 'POST':
-        form = InquilinoForm(request.POST, instance=inquilino)
+        form = InquilinoForm(request.POST)
         form.save()
+        
         return redirect('list_inquilinos')
     else:
         form = InquilinoForm(instance=inquilino)
@@ -86,15 +88,32 @@ def buscar_endereco(request):
 
 def detalhar_imovel(request, imovel_id):
     imovel = get_object_or_404(Imovel, id=imovel_id)
+    imagens = imovel.imagens.all()
+    
+    print(imagens)
 
     latitude,longitude,display_name = get_coordinates_from_address(cep=imovel.cep)
 
     return render(request, 'imoveis/detalhar_imovel.html', {
         'imovel': imovel,
+        'imagens': imagens,
         'latitude': latitude,
         'longitude': longitude,
         'display_name': display_name
     })
+
+# Vitrine de Imóveis
+def vitrine_imoveis(request):
+    # Filtra os imóveis que não possuem inquilinos (imóveis disponíveis)
+    imoveis_disponiveis = Imovel.objects.filter(~Q(id__in=Inquilino.objects.values('imovel_id')))
+
+    # Para cada imóvel disponível, tenta pegar a imagem destacada ou a primeira imagem disponível
+    for imovel in imoveis_disponiveis:
+        # Busca a imagem destacada ou, caso não tenha, pega a primeira imagem
+        imagem_destaque = imovel.imagens.filter(destaque=True).first() or imovel.imagens.first()
+        imovel.imagem_destaque = imagem_destaque  # Adiciona dinamicamente o atributo para facilitar o uso no template
+
+    return render(request, 'imoveis/vitrine.html', {'imoveis': imoveis_disponiveis})
 
 # Listagem de Imóveis
 def list_imoveis(request):
@@ -122,9 +141,15 @@ def list_imoveis(request):
 @login_required
 def adicionar_imovel(request):
     if request.method == 'POST':
-        form = ImovelForm(request.POST)
+        form = ImovelForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
+            imovel = form.save()
+
+            print(f'============> {request.FILES}')
+            for imagem in request.FILES.getlist('imagens'):
+                print(f'============> {imagem}')
+                ImagemImovel.objects.create(imovel=imovel, imagem=imagem)
+            
             return redirect('list_imoveis')
     else:
         form = ImovelForm()
@@ -135,8 +160,14 @@ def adicionar_imovel(request):
 def editar_imovel(request, imovel_id):
     imovel = get_object_or_404(Imovel, id=imovel_id)
     if request.method == 'POST':
-        form = ImovelForm(request.POST, instance=imovel)
-        form.save()
+        form = ImovelForm(request.POST, request.FILES, instance=imovel)
+        imovel = form.save()
+
+        print(f'============> {request.FILES}')
+        for imagem in request.FILES.getlist('imagens'):
+            print(f'============> {imagem}')
+            ImagemImovel.objects.create(imovel=imovel, imagem=imagem)
+            
         return redirect('list_imoveis')
     else:
         form = ImovelForm(instance=imovel)

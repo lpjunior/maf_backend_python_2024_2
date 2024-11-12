@@ -35,6 +35,13 @@ class Imovel(models.Model):
     def __str__(self):
         return f"{self.identificador}{self.endereco} - {self.cidade}/{self.estado}"
 
+# Modelo para as imagens do imovel
+class ImagemImovel(models.Model):
+    imovel = models.ForeignKey(Imovel, related_name='imagens', on_delete=models.CASCADE)
+    imagem = models.ImageField(upload_to='imoveis/')
+    destaque = models.BooleanField(default=False)
+    data_upload = models.DateTimeField(auto_now_add=True)
+
 # Modelo para Inquilinos
 class Inquilino(models.Model):
     nome = models.CharField(max_length=100)
