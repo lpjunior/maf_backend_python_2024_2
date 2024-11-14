@@ -57,6 +57,7 @@
         </div>
         {% endif %}
     </div>
+    {% if request.user.is_authenticated %}
     <h1>Dashboard de Pagamentos</h1>
     <div class="row mt-4">
         <!-- Card Total Recebido -->
@@ -99,5 +100,6 @@
             </div>
         </div>
     </div>
+    {% endif%}
 </div>
 {% endblock %}

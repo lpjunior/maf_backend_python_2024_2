@@ -59,7 +59,7 @@ CELERY_REDIS_BACKEND_USE_SSL = {
 CELERY_BEAT_SCHEDULE = {
     'verificar_vencimento_aluguel': {
         'task': 'imoveis.tasks.verificar_vencimento_aluguel',
-        'schedule': crontab(hour=3, minute=26), # Executa diariamente às 9h
+        'schedule': crontab(hour=9, minute=0), # Executa diariamente às 9h
     }
 }
 
