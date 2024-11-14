@@ -36,8 +36,6 @@ LOGIN_URL = 'login'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-print(f'===MEDIA_ROOT===> {MEDIA_ROOT}')
-
 
 # Redis definition
 REDIS_HOST = os.getenv('REDIS_HOST')

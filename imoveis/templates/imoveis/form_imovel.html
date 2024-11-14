@@ -7,12 +7,12 @@
 <form method="post" class="row g-3" enctype="multipart/form-data">
     {% csrf_token %}
 
-    <div class="col-md-4">
+    <div class="col-md-2">
         {{ form.tipo_imovel.label_tag }}
         {{ form.tipo_imovel }}
     </div>
     
-    <div class="col-md-4">
+    <div class="col-md-2">
         {{ form.cep.label_tag }}
         {{ form.cep }}
     </div>
@@ -67,6 +67,29 @@
 {% endblock %}
 
 {% block extra_js %}
+    <script>
+        document.getElementById('id_cep').addEventListener('blur', function() {
+            const cep = this.value;
+            if(cep) {
+                fetch(`/buscar-endereco/?cep=${cep}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if(data.erro) {
+                            alert(data.erro);
+                        } else {
+                            document.getElementById('id_endereco').value = data.endereco;
+                            document.getElementById('id_bairro').value = data.bairro;
+                            document.getElementById('id_cidade').value = data.cidade;
+                            document.getElementById('id_estado').value = data.estado;
+                            document.getElementById('id_cep').value = data.cep;
+                        }
+                    })
+                    .catch(error => {
+                        alert('Erro ao buscar o endereço: ' + error);
+                    });
+            }
+        });
+    </script>
     <script>
         function validateFileCount() {
             const input = document.getElementById('imagens');

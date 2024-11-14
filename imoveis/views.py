@@ -28,11 +28,7 @@ def adicionar_inquilino(request):
     if request.method == 'POST':
         form = InquilinoForm(request.POST, request.FILES)
         if form.is_valid():
-            imovel = form.save()
-            
-            for imagem in request.FILES.getlist('imagens'):
-                ImagemImovel.objects.create(imovel=imovel, imagem=imagem)
-            
+            form.save()
             return redirect('list_inquilinos')
     else:
         form = InquilinoForm()
@@ -105,7 +101,7 @@ def detalhar_imovel(request, imovel_id):
 # Vitrine de Imóveis
 def vitrine_imoveis(request):
     # Filtra os imóveis que não possuem inquilinos (imóveis disponíveis)
-    imoveis_disponiveis = Imovel.objects.filter(~Q(id__in=Inquilino.objects.values('imovel_id')))
+    imoveis_disponiveis = Imovel.objects.filter(~Q(id__in=Aluguel.objects.values('inquilino__imovel_id')))
 
     # Para cada imóvel disponível, tenta pegar a imagem destacada ou a primeira imagem disponível
     for imovel in imoveis_disponiveis:
@@ -182,6 +178,14 @@ def excluir_imovel(request, imovel_id):
         return redirect('list_imoveis')
     return render(request, 'imoveis/excluir_imovel.html', {'imovel': imovel})
 
+@login_required
+def preco_imovel(request, imovel_id):
+    try:
+        imovel = get_object_or_404(Imovel, id=imovel_id)
+        return JsonResponse({'preco_aluguel': str(imovel.preco_aluguel)})
+    except Imovel.DoesNotExist:
+        return JsonResponse({'error': 'Imóvel não encontrado'}, status=404)
+    
 # Login
 def user_login(request):
     if request.method == 'POST':
@@ -243,7 +247,7 @@ def exportar_relatorio_csv(request):
     
     for aluguel in alugueis:
         writer.writerow([
-            aluguel.inquilino.imovel.endereco,
+            aluguel.imovel.endereco,
             aluguel.inquilino.nome,
             aluguel.data_vencimento,
             f"{aluguel.valor:.0f}",
@@ -266,7 +270,7 @@ def listar_alugueis(request):
     return render(request, 'alugueis/listar_alugueis.html', {'alugueis' : alugueis})
 
 @login_required
-def cadastrar_aluguel(request):
+def adicionar_aluguel(request):
     if request.method == 'POST':
         form = AluguelForm(request.POST)
         if form.is_valid():
@@ -278,8 +282,8 @@ def cadastrar_aluguel(request):
 
 @login_required
 def editar_aluguel(request, aluguel_id):
-    aluguel = get_object_or_404(Aluguel, id = aluguel_id)
-    
+    aluguel = get_object_or_404(Aluguel, id=aluguel_id)
+
     if request.method == 'POST':
         form = AluguelForm(request.POST, instance=aluguel)
         if form.is_valid():
@@ -287,7 +291,19 @@ def editar_aluguel(request, aluguel_id):
             return redirect('listar_alugueis')
     else:
         form = AluguelForm(instance=aluguel)
-    return render(request, 'alugueis/form_aluguel.html', {'form': form, 'aluguel': aluguel, 'title': 'Editar Aluguel'})
+
+    # Obtenha o preço do aluguel do imóvel, se houver
+    if aluguel.imovel:
+        preco_aluguel = aluguel.imovel.preco_aluguel
+    else:
+        preco_aluguel = Decimal(0.0)
+
+    return render(request, 'alugueis/form_aluguel.html', {
+        'form': form,
+        'aluguel': aluguel,
+        'preco_aluguel': preco_aluguel,
+        'title': 'Editar Aluguel'
+    })
 
 @login_required
 def excluir_aluguel(request, aluguel_id):

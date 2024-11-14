@@ -7,19 +7,39 @@
 <form method="post" class="row g-3">
     {% csrf_token %}
 
-    <div class="col-md-6">
+    <div class="col-md-3">
         {{ form.inquilino.label_tag }}
         {{ form.inquilino }}
     </div>
-    <div class="col-md-6">
-        {{ form.valor.label_tag }}
-        {{ form.valor }}
+    <div class="col-md-3">
+        {{ form.imovel.label_tag }}
+        {{ form.imovel }}
     </div>
-    <div class="col-md-6">
+    <div class="col-md-3">
         {{ form.data_vencimento.label_tag }}
         {{ form.data_vencimento }}
     </div>
-    <div class="col-md-6">
+    <div class="col-md-3">
+        {{ form.valor.label_tag }}
+        {{ form.valor }}
+    </div>
+    <div class="col-md-3">
+        {{ form.iptu.label_tag }}
+        {{ form.iptu }}
+    </div>
+    <div class="col-md-3">
+        {{ form.taxa_incendio.label_tag }}
+        {{ form.taxa_incendio }}
+    </div>
+    <div class="col-md-3">
+        {{ form.condominio.label_tag }}
+        {{ form.condominio }}
+    </div>
+    <div class="col-md-3">
+        {{ form.outras_taxas.label_tag }}
+        {{ form.outras_taxas }}
+    </div>
+    <div class="col-md-3">
         {{ form.pago.label_tag }}
         {{ form.pago }}
     </div>
@@ -40,4 +60,61 @@
         <a href="{% url 'listar_alugueis' %}" class="btn btg-large btn-secondary">Cancelar</a>
     </div>
 </form>
+{% endblock %}
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const imovelSelect = document.getElementById('{{ form.imovel.id_for_label }}');
+        const valorAluguelInput = document.getElementById('{{ form.valor.id_for_label }}');
+        const iptuInput = document.getElementById('{{ form.iptu.id_for_label }}');
+        const taxaIncendioInput = document.getElementById('{{ form.taxa_incendio.id_for_label }}');
+        const condominioInput = document.getElementById('{{ form.condominio.id_for_label }}');
+        const outrasTaxasInput = document.getElementById('{{ form.outras_taxas.id_for_label }}');
+
+        // Define o valor inicial do aluguel base para o modo de edição
+        let valorAluguelBase = parseFloat('{{ preco_aluguel|default:"0.0" }}');
+
+        // Função para atualizar o valor do aluguel base ao selecionar um imóvel
+        function atualizarValorAluguelBase() {
+            const imovelId = imovelSelect.value;
+            if (imovelId) {
+                fetch(`/imoveis/preco_imovel/${imovelId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.preco_aluguel) {
+                            valorAluguelBase = parseFloat(data.preco_aluguel) || 0;
+                            calcularValorFinal();
+                        } else {
+                            alert('Erro ao obter o preço do aluguel.');
+                        }
+                    })
+                    .catch(error => console.error('Erro na requisição:', error));
+            } else {
+                valorAluguelBase = 0;
+                calcularValorFinal();
+            }
+        }
+
+        function calcularValorFinal() {
+            const iptu = parseFloat(iptuInput.value) || 0;
+            const taxaIncendio = parseFloat(taxaIncendioInput.value) || 0;
+            const condominio = parseFloat(condominioInput.value) || 0;
+            const outrasTaxas = parseFloat(outrasTaxasInput.value) || 0;
+
+            const valorFinal = valorAluguelBase + iptu + taxaIncendio + condominio + outrasTaxas;
+            valorAluguelInput.value = valorFinal.toFixed(2);
+        }
+
+        // Evento de mudança para atualizar o valor do aluguel ao selecionar um imóvel
+        imovelSelect.addEventListener('change', atualizarValorAluguelBase);
+
+        // Adiciona o evento de escuta para cada taxa
+        [iptuInput, taxaIncendioInput, condominioInput, outrasTaxasInput].forEach(input => {
+            input.addEventListener('input', calcularValorFinal);
+        });
+
+        // Calcula o valor inicial ao carregar a página
+        calcularValorFinal();
+    });
+</script>
 {% endblock %}
