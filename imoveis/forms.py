@@ -4,22 +4,6 @@ from decimal import Decimal
 from django.db.models import Q
 from imoveis.models import Imovel, Inquilino, Aluguel, ImagemImovel
 
-class MultipleFileInput(forms.ClearableFileInput):
-    allow_multiple_selected = True
-
-class MultipleFileField(forms.FileField):
-    def __init__(self, *args, **kwargs):
-        kwargs.setdefault("widget", MultipleFileInput())
-        super().__init__(*args, **kwargs)
-
-    def clean(self, data, initial=None):
-        single_file_clean = super().clean
-        if isinstance(data, (list, tuple)):
-            result = [single_file_clean(d, initial) for d in data]
-        else:
-            result = single_file_clean(data, initial)
-        return result
-
 class ImagemImovelForm(forms.ModelForm):
     class Meta:
         model = ImagemImovel
@@ -27,7 +11,6 @@ class ImagemImovelForm(forms.ModelForm):
     
 class ImovelForm(forms.ModelForm):
     imagens = forms.FileField(widget=forms.ClearableFileInput(attrs={'allow_multiple_selected': True}), required=False)
-    #imagem = MultipleFileField(label='Selecione as fotos', required=False)
     
     class Meta:
         model = Imovel

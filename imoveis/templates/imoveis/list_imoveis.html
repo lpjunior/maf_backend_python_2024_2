@@ -29,6 +29,7 @@
 <table class="table table-striped">
     <thead class="thead-dark">
         <tr>
+            <th scope="col">Identificador</th>
             <th scope="col">Endereço</th>
             <th scope="col">Cidade</th>
             <th scope="col">Estado</th>
@@ -41,7 +42,8 @@
     <tbody>
         {% for imovel in imoveis %}
         <tr onclick="window.location='{% url 'detalhar_imovel' imovel.id %}'" style="cursor: pointer;">
-        <td>{{ imovel.endereco }}</td>
+            <td>{{ imovel.identificador }}</td>
+            <td>{{ imovel.endereco }}</td>
             <td>{{ imovel.cidade }}</td>
             <td>{{ imovel.estado }}</td>
             <td>R$ {{ imovel.preco_aluguel }}</td>

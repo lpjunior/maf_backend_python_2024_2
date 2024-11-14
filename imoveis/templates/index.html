@@ -1,5 +1,5 @@
 ﻿{% extends 'base.html' %}
-
+{% load static %}
 {% block title %}Página Inicial{% endblock %}
 
 {% block content %}
@@ -11,7 +11,10 @@
 <div class="container mt-4">
     <div class="row">
         {% if request.user.is_authenticated %}
-        <div class="col-md-4">
+        <div class="col-md-12 mb-12 my-5">
+            <img src="{% static 'images/logo_imobiliaria.png' %}" alt="Logo Imobiliária Senac" class="rounded mx-auto d-block">
+        </div>
+        <div class="col-md-6 mb-4">
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">Imóveis</h5>
@@ -20,7 +23,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-6 mb-4">
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">Inquilinos</h5>
@@ -29,7 +32,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-6 mb-4">
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">Alugueis</h5>
@@ -38,7 +41,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-6 mb-4">
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">Relatórios</h5>
@@ -53,6 +56,48 @@
             <a href="{% url 'login' %}" class="btn btn-primary mt-2">Login</a>
         </div>
         {% endif %}
+    </div>
+    <h1>Dashboard de Pagamentos</h1>
+    <div class="row mt-4">
+        <!-- Card Total Recebido -->
+        <div class="col-md-3">
+            <div class="card text-white bg-success mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Total Recebido</h5>
+                    <p class="card-text">R$ {{ total_recebido|floatformat:2 }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card Pagamentos Pendentes -->
+        <div class="col-md-3">
+            <div class="card text-white bg-warning mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Pagamentos Pendentes</h5>
+                    <p class="card-text">{{ pagamentos_pendentes }} pagamento(s)</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card Pagamentos Vencidos -->
+        <div class="col-md-3">
+            <div class="card text-white bg-danger mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Pagamentos Vencidos</h5>
+                    <p class="card-text">{{ pagamentos_vencidos }} pagamento(s)</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card Pagamentos Próximos do Vencimento -->
+        <div class="col-md-3">
+            <div class="card text-white bg-info mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Pgtos Próximos de Vencer</h5>
+                    <p class="card-text">{{ proximos_vencimentos }} pagamento(s)</p>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}

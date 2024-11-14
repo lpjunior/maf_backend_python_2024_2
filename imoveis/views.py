@@ -1,4 +1,6 @@
+import os
 import csv
+import uuid
 import datetime
 
 from django.contrib import messages
@@ -20,7 +22,30 @@ from imoveis.services.search_address_by_cep import buscar_endereco_por_cep
 
 # Página inicial
 def index(request):
-    return render(request, 'index.html')
+    # Calcula o total recebido, somando os valores pagos
+    total_recebido = Aluguel.objects.filter(pago=True).aggregate(Sum('valor'))['valor__sum'] or 0
+
+    # Conta a quantidade de pagamentos pendentes
+    pagamentos_pendentes = Aluguel.objects.filter(pago=False).count()
+
+    # Conta os pagamentos vencidos
+    hoje = timezone.now().date()
+    pagamentos_vencidos = Aluguel.objects.filter(pago=False, data_vencimento__lt=hoje).count()
+
+    # Conta os pagamentos que estão próximos do vencimento (por exemplo, nos próximos 7 dias)
+    proximos_vencimentos = Aluguel.objects.filter(
+        pago=False,
+        data_vencimento__range=[hoje, hoje + timezone.timedelta(days=7)]
+    ).count()
+
+    context = {
+        'total_recebido': total_recebido,
+        'pagamentos_pendentes': pagamentos_pendentes,
+        'pagamentos_vencidos': pagamentos_vencidos,
+        'proximos_vencimentos': proximos_vencimentos,
+    }
+
+    return render(request, 'index.html', context)
 
 # Adicionar Inquilino
 @login_required
@@ -100,8 +125,8 @@ def detalhar_imovel(request, imovel_id):
 
 # Vitrine de Imóveis
 def vitrine_imoveis(request):
-    # Filtra os imóveis que não possuem inquilinos (imóveis disponíveis)
-    imoveis_disponiveis = Imovel.objects.filter(~Q(id__in=Aluguel.objects.values('inquilino__imovel_id')))
+    # Filtra os imóveis que não possuem aluguéis ativos (imóveis disponíveis)
+    imoveis_disponiveis = Imovel.objects.filter(~Q(id__in=Aluguel.objects.values('imovel_id')))
 
     # Para cada imóvel disponível, tenta pegar a imagem destacada ou a primeira imagem disponível
     for imovel in imoveis_disponiveis:
@@ -141,11 +166,16 @@ def adicionar_imovel(request):
         if form.is_valid():
             imovel = form.save()
 
-            print(f'============> {request.FILES}')
+            # Processamento das imagens com renomeação
             for imagem in request.FILES.getlist('imagens'):
-                print(f'============> {imagem}')
+                # Gerar um novo nome único para o arquivo
+                ext = imagem.name.split('.')[-1]
+                new_name = f"{uuid.uuid4()}_{imovel.identificador}.{ext}"
+                imagem.name = new_name
+
+                # Criar a entrada da imagem no banco com o novo nome
                 ImagemImovel.objects.create(imovel=imovel, imagem=imagem)
-            
+
             return redirect('list_imoveis')
     else:
         form = ImovelForm()
@@ -157,17 +187,41 @@ def editar_imovel(request, imovel_id):
     imovel = get_object_or_404(Imovel, id=imovel_id)
     if request.method == 'POST':
         form = ImovelForm(request.POST, request.FILES, instance=imovel)
-        imovel = form.save()
+        if form.is_valid():
+            imovel = form.save()
 
-        print(f'============> {request.FILES}')
-        for imagem in request.FILES.getlist('imagens'):
-            print(f'============> {imagem}')
-            ImagemImovel.objects.create(imovel=imovel, imagem=imagem)
-            
-        return redirect('list_imoveis')
+            # Processar novas imagens sem excluir as antigas
+            for imagem in request.FILES.getlist('imagens'):
+                # Gerar um nome único para a nova imagem
+                ext = imagem.name.split('.')[-1]
+                new_name = f"{uuid.uuid4()}_{imovel.identificador}.{ext}"
+                imagem.name = new_name
+                ImagemImovel.objects.create(imovel=imovel, imagem=imagem)
+
+            # Definir imagem de destaque
+            destaque_id = request.POST.get("imagem_destaque")
+            if destaque_id:
+                # Resetar destaque das imagens atuais
+                imovel.imagens.update(destaque=False)
+                # Definir a imagem selecionada como destaque
+                try:
+                    destaque_imagem = ImagemImovel.objects.get(id=destaque_id, imovel=imovel)
+                    destaque_imagem.destaque = True
+                    destaque_imagem.save()
+                except ImagemImovel.DoesNotExist:
+                    pass
+
+            return redirect('list_imoveis')
     else:
         form = ImovelForm(instance=imovel)
-    return render(request, 'imoveis/form_imovel.html', {'form': form, 'title': 'Editar Imóvel'})
+
+    # Carregar as imagens existentes para exibição e seleção de destaque
+    imagens_existentes = imovel.imagens.all()
+    return render(request, 'imoveis/form_imovel.html', {
+        'form': form,
+        'title': 'Editar Imóvel',
+        'imagens_existentes': imagens_existentes,
+    })
 
 # Excluir Imóvel
 @login_required

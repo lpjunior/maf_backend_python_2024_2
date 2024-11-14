@@ -3,8 +3,11 @@
 |- gestao_alugueis/             # Diretório do projeto principal
     |- __init__.py              # Definir diretório como modulo
     |- settings.py              # Configuração do Django para o projeto
+    |- celery.py                # 
+    |- utils.py                 # 
     |- urls.py                  # Mapeamento de URLs para todo o projeto
     |- wsgi.py                  # Ponto de entrada WSGI para servidores compatíveis
+    |- asgi.py                  # Ponto de entrada ASGI para servidores compatíveis
 |
 |- imoveis/                     # Aplicativo 'imoveis' dentro do projeto
     |- migrations
@@ -12,32 +15,44 @@
         |- 0001_initial.py      # Arquivo de migrate da estrutura incial do projeto
     |- templates/               # Templates específicos da aplicação 'imoveis'
         |- imoveis/
-            |- base.html                     # Template base para todas as págians
-            |- index.html                    # Página inicial
-            |- login.html                    # Página de login
-            |- list_imoveis.html             # Lista de imoveis
-            |- form_imoveis.html             # Adicionar/Editar Imovel
-            |- form_inquilino.html           # Adicionar/Editar Inquilino
-            |- excluir_imoveis.html          # Excluir Imovel
-            |- list_inquilinos.html          # Lista de inquilinos
-            |- relatorio_pagamentos.html     # Relatório dos pagamentos ocorridos e pendentes
+            |- imoveis/detalhar_imovel.html             # Detalhar imóvel
+            |- imoveis/excluir_imovel.html              # Excluir imóvel
+            |- imoveis/form_imovel.html                 # Adicionar/Editar imóvel
+            |- imoveis/list_imoveis.html                # Lista de imoveis
+            |- alugueis/excluir_aluguel.html            # Excluir aluguel
+            |- alugueis/form_aluguel.html               # Adicionar/Editar aluguel
+            |- alugueis/listar_alugueis.html            # Lista de alugueis
+            |- email/base.html                          # Template base para todas as páginas de notificação
+            |- email/aluguel_vencido.html               # Template de notificação de aluguel vencido
+            |- email/contato_imovel.html                # Template de notificação de contato com interesse no imóvel
+            |- email/proximo_vencimento.html            # Template de notificação de aluguel próximo do vencimento
+            |- inquilinos/excluir_inquilino.html        # Excluir inquilino
+            |- inquilinos/form_inquilino.html           # Adicionar/Editar inquilino
+            |- inquilinos/list_inquilinos.html          # Lista de inquilinos
+            |- relatorios/relatorio_pagamentos.html     # Relatório dos pagamentos ocorridos e pendentes
+            |- base.html                                # Template base para todas as páginas
+            |- index.html                               # Página inicial
+            |- login.html                               # Página de login
     |
     |- static/
-        |- imoveis/
-            |- css/
-                |- style.css            # Arquivo CSS customizado
+        |- images/
+                |- logo_imobiliaria.png     # Logo marca da imobiliaria
     |- templatetags/
-        |- custom_filters.py            # Arquivo de filtros customizados
+        |- custom_filters.py                # Arquivo de filtros customizados
     |
     |- admin.py                 # Configurações da administração do Django
     |- apps.py                  # Configurações da aplicação
     |- forms.py                 # Formulários da aplicação
     |- models.py                # Modelos de dados
+    |- tasks.py                 # Tasks de notificação
     |- tests.py                 # Testes unitários
     |- urls.py                  # Mapeamento de URLs para a aplicação 'imoveis'
     |- views.py                 # Views da aplicação 'imoveis'
 |
+|- media/
+    |- imoveis/                 # Diretório de upload das imagens
 |- db.sqlite3                   # Banco de dados SQLite
+|- celerybeat-schedule          # Schedule do Celery Beat
 |- manage.py                    # Script de gestão do Django
 
 Estrutura do Projeto
@@ -70,46 +85,81 @@ O projeto está organizado com as seguintes funcionalidades principais:
 5. Aluguel:
     - Adição, edição, listagem e exclusão de alugueis.
     - Marcação de aluguel pago com atualização de vencimento para 30 dias
+    - O valor do imovel + encargos   
 
 6. Notificações
         - Notificação de pagamentos pendentes nos próximos 7 dias e pagamentos vencidos.
         - Notificação de aluguel vencido em atraso.
         - Notificação de pagamento reconhecido pela imobiliaria.
+
+7. Dashboard
+    - Menu de ações
+    - Controle de renderização
+    - Logomarca da imobiliaria
+    - Métricas de pagamento
     
 Estrura do projeto (arquivos)
 
 1. Models
+    - TIPO_IMOVEL_CHOICES
     - Imovel
+    - ImagemImovel
     - Inquilino
     - Aluguel
 
 2. Views
-    - list_imoveis
+    - index
     - adicionar_inquilino
     - editar_inquilino
     - list_inquilinos
+    - excluir_inquilino
+    - buscar_endereco
+    - detalhar_imovel
+    - vitrine_imoveis
+    - list_imoveis
     - adicionar_imovel
     - editar_imovel
     - excluir_imovel
+    - preco_imovel
     - user_login
     - user_logout
     - relatorio_pagamentos
+    - exportar_relatorio_csv
+    - relatorio_avancado_json
+    - listar_alugueis
+    - adicionar_aluguel
+    - editar_aluguel
+    - excluir_aluguel
+    - marcar_como_pago
+    - contato_imovel
+    - envia_email
     
 3. Forms
+    - ImagemImovelForm
     - ImovelForm
     - InquilinoForm
+    - AluguelForm
  
 4. Templates
-    -base.html
-    -excluir_imovel.html
-    -form_imovel.html
-    -form_inquilino.html
-    -index.html
-    -list_imoveis.html
-    -list_inquilinos.html
-    -login.html
-    -relatorio_pagamentos.html
-
+    - imoveis/detalhar_imovel.html
+    - imoveis/excluir_imovel.html
+    - imoveis/form_imovel.html
+    - imoveis/list_imoveis.html
+    - alugueis/excluir_aluguel.html
+    - alugueis/form_aluguel.html
+    - alugueis/listar_alugueis.html
+    - email/aluguel_vencido.html
+    - email/base.html
+    - email/contato_imovel.html
+    - email/proximo_vencimento.html
+    - inquilinos/excluir_inquilino.html
+    - inquilinos/form_inquilino.html
+    - inquilinos/list_inquilinos.html
+    - relatorios/relatorio_pagamentos.html
+    - base.html
+    - index.html
+    - login.html
+   
 5. Configurações
     - Configurações de banco de dados, autenticação e segurança.
     - Integração com Boostrap e configurações de middleware para suporte a autenticação.
@@ -118,29 +168,24 @@ Bibliotecas Usadas
     - Django
     - Django ORM
     - Boostrap
-
+       
 Próximos passos:
-1. Vitrine de fotos do imovel
-2. Upload de fotos do imovel
-3. Ajustar o relacionamento Inquilino x Imovel x Aluguel
-4. Mudar para o PostgreSQL usando o Supabase    
-5. Painel Administrativo
-    - Criar uma dashboard métricas de pagamento
-6. Teste e Documentação:
+- Mudar para o PostgreSQL usando o Supabase
+- autenticação com rede social
+- Publicar o projeto na nuvem
+- Teste e Documentação:
     - Escrever testes unitários
     - Documentar o projeto e suas funcionalidades
-7. Publicar o projeto na nuvem
-    
-Próximos passos (opcional):
-- o valor do imovel + 10% + encargos
-- logomarca da imobiliaria
-- autenticação com rede social
 
-Atualizar a consulta de CEP para o https://www.gov.br/ 
-- solicitar o token
-- guardar o token em memoria
-- validar o expired time do token
-- consulta
+Próximos passos (opcional):
+    Atualizar a consulta de CEP para o https://www.gov.br/ 
+        - solicitar o token
+        - guardar o token em memoria
+        - validar o expired time do token
+        - consulta
+
+======================================== Rascunho de comandos ==========================================================
+
 
 git init                      # criar o repositorio
 git clone                     # copiar/clonar um repositorio

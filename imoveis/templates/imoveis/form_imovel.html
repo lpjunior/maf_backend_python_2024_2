@@ -11,12 +11,12 @@
         {{ form.tipo_imovel.label_tag }}
         {{ form.tipo_imovel }}
     </div>
-    
+
     <div class="col-md-2">
         {{ form.cep.label_tag }}
         {{ form.cep }}
     </div>
-    
+
     <div class="col-md-8">
         {{ form.endereco.label_tag }}
         {{ form.endereco }}
@@ -43,21 +43,51 @@
     </div>
 
     <div class="col-12">
-        <label for="imagens" class="form-label">Fotos do Imóvel(máximo de 5 fotos)</label>
+        <label for="imagens" class="form-label">Fotos do Imóvel (máximo de 5 fotos)</label>
         <input type="file" id="imagens" name="imagens" accept="image/*" multiple class="form-control" onchange="validateFileCount()">
         <small class="text-muted">Você pode selecionar até 5 imagens.</small>
     </div>
-    
-    {% if form.errors %}
-        <div class="alert alert-danger">
-            <ul>
-                {% for field in form %}
-                    {% for error in field.errors %}
-                        <li>{{ error }}</li>
-                    {% endfor %}
-                {% endfor %}
-            </ul>
+
+    <!-- Exibir o campo de seleção de destaque apenas no modo de edição -->
+    {% if imagens_existentes %}
+    <div class="col-12">
+        <label for="imagem_destaque" class="form-label">Definir Imagem de Destaque</label>
+        <select id="imagem_destaque" name="imagem_destaque" class="form-select">
+            <option value="">Selecione a imagem de destaque</option>
+            {% for imagem in imagens_existentes %}
+            <option value="{{ imagem.id }}" {% if imagem.destaque %}selected{% endif %}>
+                {{ imagem.imagem.name }}
+            </option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <!-- Exibir pré-visualização das imagens existentes -->
+    <div class="col-12">
+        <label class="form-label">Imagens Existentes</label>
+        <div class="row">
+            {% for imagem in imagens_existentes %}
+            <div class="col-md-3 mb-3">
+                <img src="{{ imagem.imagem.url }}" alt="Imagem do Imóvel" class="img-thumbnail">
+                {% if imagem.destaque %}
+                <small class="text-success">Imagem de Destaque</small>
+                {% endif %}
+            </div>
+            {% endfor %}
         </div>
+    </div>
+    {% endif %}
+
+    {% if form.errors %}
+    <div class="alert alert-danger">
+        <ul>
+            {% for field in form %}
+            {% for error in field.errors %}
+            <li>{{ error }}</li>
+            {% endfor %}
+            {% endfor %}
+        </ul>
+    </div>
     {% endif %}
     <div class="col-12">
         <button type="submit" class="btn btn-primary">Salvar</button>
@@ -67,36 +97,44 @@
 {% endblock %}
 
 {% block extra_js %}
-    <script>
-        document.getElementById('id_cep').addEventListener('blur', function() {
-            const cep = this.value;
-            if(cep) {
-                fetch(`/buscar-endereco/?cep=${cep}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        if(data.erro) {
-                            alert(data.erro);
-                        } else {
-                            document.getElementById('id_endereco').value = data.endereco;
-                            document.getElementById('id_bairro').value = data.bairro;
-                            document.getElementById('id_cidade').value = data.cidade;
-                            document.getElementById('id_estado').value = data.estado;
-                            document.getElementById('id_cep').value = data.cep;
-                        }
-                    })
-                    .catch(error => {
-                        alert('Erro ao buscar o endereço: ' + error);
-                    });
-            }
-        });
-    </script>
-    <script>
-        function validateFileCount() {
-            const input = document.getElementById('imagens');
-            if(input.files.length > 5) {
-                alert("Você pode fazer upload de no máximo 5 imagens.");
-                input.value = '';
-            }
+<script>
+    document.getElementById('id_cep').addEventListener('blur', function() {
+        const cep = this.value;
+        if (cep) {
+            fetch(`/buscar-endereco/?cep=${cep}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.erro) {
+                        alert(data.erro);
+                    } else {
+                        document.getElementById('id_endereco').value = data.endereco;
+                        document.getElementById('id_bairro').value = data.bairro;
+                        document.getElementById('id_cidade').value = data.cidade;
+                        document.getElementById('id_estado').value = data.estado;
+                        document.getElementById('id_cep').value = data.cep;
+                    }
+                })
+                .catch(error => {
+                    alert('Erro ao buscar o endereço: ' + error);
+                });
         }
-    </script>
+    });
+
+    function validateFileCount() {
+        const input = document.getElementById('imagens');
+        const destaqueSelect = document.getElementById('imagem_destaque');
+        if (input.files.length > 5) {
+            alert("Você pode fazer upload de no máximo 5 imagens.");
+            input.value = '';
+        } else {
+            // Adiciona novas imagens selecionadas ao seletor de destaque
+            Array.from(input.files).forEach((file, index) => {
+                const option = document.createElement('option');
+                option.value = "new_" + index;  // Valor único para diferenciar as novas imagens
+                option.text = file.name;
+                destaqueSelect.appendChild(option);
+            });
+        }
+    }
+</script>
 {% endblock %}

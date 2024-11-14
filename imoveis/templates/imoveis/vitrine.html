@@ -20,8 +20,8 @@
         {% for imovel in imoveis %}
         <div class="col-md-4 mb-4">
             <div class="card imovel-card">
-                {% if imovel.imagens.first %}
-                <img src="{{ imovel.imagens.first.imagem.url }}" class="card-img-top" alt="Imagem do Imóvel">
+                {% if imovel.imagem_destaque %}
+                <img src="{{ imovel.imagem_destaque.imagem.url }}" class="card-img-top" alt="Imagem do Imóvel">
                 {% else %}
                 <img src="/media/imoveis/placeholder.png" class="card-img-top" alt="Imagem não disponível">
                 {% endif %}
