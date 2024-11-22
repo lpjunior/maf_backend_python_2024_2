@@ -171,6 +171,8 @@ Bibliotecas Usadas
        
 Próximos passos:
 - Mudar para o PostgreSQL usando o Supabase
+    pip install psycopg2
+    pip install psycopg2-binary
 - autenticação com rede social
 - Publicar o projeto na nuvem
 - Teste e Documentação:

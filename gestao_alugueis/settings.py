@@ -14,6 +14,7 @@ import os
 from pathlib import Path
 from celery.schedules import crontab
 from dotenv import load_dotenv
+from urllib.parse import quote
 
 # Carregar o arquivo .env
 load_dotenv()
@@ -125,7 +126,7 @@ DATABASES = {
         'ENGINE': os.getenv('DB_ENGINE', 'django.db.backends.sqlite3'),
         'NAME': os.getenv('DB_NAME', BASE_DIR / 'db.sqlite3'),
         'USER': os.getenv('DB_USER', ''),
-        'PASSWORD': os.getenv('DB_PASSWORD', ''),
+        'PASSWORD': quote(os.getenv('DB_PASSWORD', '')),
         'HOST': os.getenv('DB_HOST', ''),
         'PORT': os.getenv('DB_PORT', ''),
     }
