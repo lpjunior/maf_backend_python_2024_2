@@ -1,4 +1,8 @@
 {% extends 'email/base.html' %}
 {% block content %}
-    {{ content }}
+    <p>Olá, o {{nome}} está interessado no imóvel {{identificador}}</p>
+    <p><strong>Telefone:</strong> {{telefone}}</p>
+    <p><strong>E-mail:</strong> {{email}}</p>
+    <br>
+    <p><strong>Mensagem do contato:</strong> {{mensagem}}</p>
 {% endblock %}

@@ -416,12 +416,11 @@ def contato_imovel(request):
             
             mensagem_html = render_to_string('email/contato_imovel.html', {
                 'titulo_email': 'Contato Sobre Imóvel',
-                'content': 
-                    f'''<p>Olá, o {nome} está interessado no imóvel {identificador}</p>
-                        <p><strong>Telefone:</strong> {telefone}</p>
-                        <p><strong>E-mail:</strong> {email}</p>
-                        <br>
-                        <p><strong>Mensagem do contato:</strong> {mensagem}</p>''',
+                'nome': nome,
+                'identificador': identificador,
+                'telefone': telefone,
+                'email': email,
+                'mensagem': mensagem,
                 'ano_atual': ano_atual
             })
             
